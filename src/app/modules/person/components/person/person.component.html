@@ -1,0 +1,40 @@
+<mat-card>
+  <mat-card-title>
+    {{person.firstname + ' ' + person.lastname}}
+  </mat-card-title>
+  <div fxLayout="column"
+       fxLayoutAlign="left"
+       fxLayoutGap="3px">
+
+    <div fxFlex="50%">
+      {{person.id}} ({{person.dateCreated | date: DATE_FORMAT}})
+    </div>
+    <div fxLayout="row"
+         fxLayoutAlign="left"
+         fxLayoutGap="3px">
+      <div fxFlex="90%">
+        {{person.firstname}}
+        {{person.lastname}}
+      </div>
+      <div fxFlex="10%">
+<!--        {{person.birthdate && person.birthdate !== null? (person.birthdate | date: DATE_FORMAT ):'Birdthdate n/a'}}-->
+      </div>
+    </div>
+    <div fxLayout="row"
+         fxLayoutAlign="left"
+         fxLayoutGap="3px">
+      <div fxFlex="60%">
+        <div *ngFor="let email of person.email">
+          {{email}}
+        </div>
+      </div>
+      <div fxFlex="40%">
+        <div *ngFor="let phone of person.phone">
+          {{phone}}
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-card>
+
+

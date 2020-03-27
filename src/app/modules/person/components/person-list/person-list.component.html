@@ -1,0 +1,10 @@
+<div *ngIf="persons$ | async as persons">
+  <div class="top-bar">
+    <h4>{{persons.length}} Persons </h4>
+    <input matInput #filterField ([ngModel])="fullTextFilter" (keyup)="searchTrigger($event)">
+  </div>
+  <div class="cardList">
+    <app-person *ngFor="let person of persons" [person]="person" class="cardListItem">
+    </app-person>
+  </div>
+</div>

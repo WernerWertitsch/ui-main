@@ -1,0 +1,5 @@
+{
+  "/person": {
+    "target": "http://localhost:8080/apis/graphql"
+  }
+}
