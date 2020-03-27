@@ -10,12 +10,15 @@ import {Person} from "../../domain";
 })
 export class PersonViewComponent implements OnInit {
 
-  constructor(private clientService: PersonClientService) { }
-
   personList: Observable<Person[]>;
 
-  ngOnInit(): void {
+  constructor(private clientService: PersonClientService) {
     this.personList = this.clientService.watchAllPersons();
+  }
+
+
+  ngOnInit(): void {
+
   }
 
 }

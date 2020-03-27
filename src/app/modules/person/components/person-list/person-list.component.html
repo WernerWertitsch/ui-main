@@ -1,7 +1,9 @@
-<div *ngIf="persons$ | async as persons">
+<div *ngIf="filteredPersons$ | async as persons">
   <div class="top-bar">
-    <h4>{{persons.length}} Persons </h4>
-    <input matInput #filterField ([ngModel])="fullTextFilter" (keyup)="searchTrigger($event)">
+    <div fxFlex="80%">
+      Voll Text Filter: <input matInput #filterField [(ngModel)]="fullTextFilter" (keyup)="searchTrigger($event)">
+    </div>
+    <div fxFles="20%"><h4>{{persons.length}} Persons </h4></div>
   </div>
   <div class="cardList">
     <app-person *ngFor="let person of persons" [person]="person" class="cardListItem">
