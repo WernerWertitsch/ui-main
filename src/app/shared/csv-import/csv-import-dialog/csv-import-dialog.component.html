@@ -5,26 +5,27 @@
   </div>
 </div>
 <mat-card>
-  <input type="file" #fileInput ng2FileSelect (onFileSelected)="fileChosen($event)" />
-<!--  <ng2-file-input (onAction)="fileChosen($event)"></ng2-file-input>-->
-  <mat-toolbar><mat-toolbar-row>
-  <div style="width:80%">
-    <span>Delimiter: </span>
-    <select [(ngModel)]="delimiter" (change)="parseFile()">
-      <option value=";">;</option>
-      <option value=",">,</option>
-      <option value="|">|</option>
-      <option value="\t">TAB</option>
-    </select>
-  </div>
-  <div style="width:10%">
-    <button mat-raised-button *ngIf="fileList" (click)="parseFile()">Reload</button>
-  </div>
-  </mat-toolbar-row></mat-toolbar>
+  <input type="file" #fileInput ng2FileSelect [uploader]="uploader" (onFileSelected)="fileChosen($event)"/>
+  <!--  <ng2-file-input (onAction)="fileChosen($event)"></ng2-file-input>-->
+  <mat-toolbar>
+    <div style="width:80%">
+      <span>Delimiter: </span>
+      <select [(ngModel)]="delimiter" (change)="parseFile()">
+        <option value=";">;</option>
+        <option value=",">,</option>
+        <option value="|">|</option>
+        <option value="\t">TAB</option>
+      </select>
+    </div>
+    <div style="width:10%">
+      <button mat-raised-button *ngIf="fileList" (click)="parseFile()">Reload</button>
+    </div>
+  </mat-toolbar>
 
-  <app-generic-entity-table [entities]="currentEntities"></app-generic-entity-table>
-  <button (click)="confirmed()" *ngIf="fileList" mat-raised-button
-  class="buttom-button">Import</button>
+  <div *ngIf="currentEntities | async as entities">
+    <app-generic-entity-table [entities]="currentEntities | async"></app-generic-entity-table>
+    <button (click)="confirmed()" mat-raised-button class="buttom-button">Import</button>
+  </div>
 </mat-card>
 
 <app-tiny-log></app-tiny-log>

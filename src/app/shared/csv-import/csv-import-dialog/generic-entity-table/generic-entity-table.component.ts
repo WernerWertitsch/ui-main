@@ -10,6 +10,7 @@ export class GenericEntityTableComponent implements OnInit {
 
   @Input()
   entities: BaseEntity[];
+
   columns: string[] = [];
   columnWidth: number;
 

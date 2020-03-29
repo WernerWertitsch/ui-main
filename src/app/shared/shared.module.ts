@@ -12,10 +12,12 @@ import {BaseEntity} from "./domain/base-domain";
 import { GenericEntityTableComponent } from './csv-import/csv-import-dialog/generic-entity-table/generic-entity-table.component';
 import {MatIconModule} from "@angular/material/icon";
 import {FileUploadModule} from "ng2-file-upload";
+import {TinyLogService} from "./tiny-log/tiny-log.service";
 
 
 @NgModule({
   declarations: [CsvImportDialogComponent, TinyLogComponent, GenericEntityTableComponent],
+  providers: [TinyLogService],
   imports: [
     CommonModule,
     FormsModule,
@@ -25,7 +27,7 @@ import {FileUploadModule} from "ng2-file-upload";
     MatToolbarModule,
     MatDialogModule,
     MatIconModule,
-    FileUploadModule
+    FileUploadModule,
   ],
   exports: [
     FormsModule,

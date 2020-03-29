@@ -37,6 +37,22 @@ export class PersonClientService extends AbstractGraphqlService {
     );
   }
 
+  createPerson(person: Person): Observable<Person> {
+    let personAsString = JSON.stringify(person);
+    return this.mutation<Person>(`mutation {
+      createPerson(${personAsString})
+       {
+        id
+        lastname
+        firstname
+        email
+        phone
+        birthdate
+        dateCreated
+      }
+    }`, "findAllPersons", undefined);
+  }
+
 
 
 }

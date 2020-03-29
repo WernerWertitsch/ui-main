@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {BehaviorSubject,  fromEvent, Observable} from "rxjs";
+import {BehaviorSubject,  Observable} from "rxjs";
 import {Person} from "../../domain";
-import {filter, map} from "rxjs/operators";
+import { map} from "rxjs/operators";
 import {combineLatest} from 'rxjs';
 
 @Component({

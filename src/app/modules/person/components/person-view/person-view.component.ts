@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PersonClientService} from "../../service/person-client.service";
-import {Observable} from "rxjs";
+import {forkJoin, merge, Observable, of} from "rxjs";
 import {Person} from "../../domain";
 import {MatDialog} from "@angular/material/dialog";
 import {CsvImportDialogComponent} from "../../../../shared/csv-import/csv-import-dialog/csv-import-dialog.component";
+import {combineLatest, filter} from "rxjs/operators";
 
 @Component({
   selector: 'app-person-view',
@@ -23,8 +24,26 @@ export class PersonViewComponent implements OnInit {
 
   }
 
+  import(persons: Person[]) {
+    const all: Observable<Person>[] = [];
+    persons.forEach(p => {
+      all.push(this.clientService.createPerson(p));
+    });
+    combineLatest(forkJoin(all), this.personList),
+      ([imported, original]: [Person[], Person[]]) => {
+        this.personList = of(imported.concat(original));
+      }
+  }
+
   openImporter(): void {
-    let dialogRef = this.dialog.open(CsvImportDialogComponent);
+    let dialogRef = this.dialog.open(CsvImportDialogComponent, {
+      width: '80%'
+    });
+    dialogRef.afterClosed().pipe(
+      filter(ps =>
+        ps != undefined && ps.length > 0))
+      .subscribe(p =>
+        import(p))
   }
 
 }

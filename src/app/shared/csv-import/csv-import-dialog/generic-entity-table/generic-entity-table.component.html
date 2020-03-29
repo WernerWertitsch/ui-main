@@ -2,5 +2,7 @@
   <div *ngFor="let column of columns" [fxFlex]="columnWidth+'%'">{{column}}</div>
 </div>
 <div *ngFor="let entity of entities" fxLayout="column">
-  <div *ngFor="let column of columns" [fxFlex]="columnWidth+'%'">{{entity[column]}}</div>
+  <div fxLayout="row">
+    <div *ngFor="let column of columns" [fxFlex]="columnWidth+'%'">{{entity[column]}}</div>
+  </div>
 </div>

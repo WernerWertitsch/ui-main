@@ -4,6 +4,7 @@ import {BaseEntity} from "../../domain/base-domain";
 import {Importer} from "../importer";
 import {TinyLogService} from "../../tiny-log/tiny-log.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {FileUploader} from "ng2-file-upload";
 
 @Component({
   selector: 'app-filedialog',
@@ -11,11 +12,17 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
   styleUrls: ['./csv-import-dialog.component.css']
 })
 export class CsvImportDialogComponent<T extends BaseEntity> implements OnInit {
+  @Output()
+  dataChosen: EventEmitter<T[]> = new EventEmitter();
+
+
   fileList: File[];
+  public uploader:FileUploader = new FileUploader({url: ''});
   currentEntities: Subject<BaseEntity[]> = new ReplaySubject();
   firstLoadHappened = false;
   delimiter = "";
   importer: Importer<any>;
+
 
   constructor(private tinyLogService: TinyLogService,
               public dialogRef: MatDialogRef<CsvImportDialogComponent<any>>,
@@ -39,7 +46,8 @@ export class CsvImportDialogComponent<T extends BaseEntity> implements OnInit {
   }
 
   fileChosen($fileEvent: any) {
-    this.fileList = $fileEvent.currentFiles;
+    if($fileEvent)
+    this.fileList = [$fileEvent[0]];
     this.parseFile();
   }
 

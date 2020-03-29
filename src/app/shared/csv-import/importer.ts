@@ -51,7 +51,12 @@ export class Importer<T extends BaseEntity> {
     }
     const obj = new Object();
     for(let i=0; i<data.length; i++) {
-      let value = data[i];
+      let value;
+      if(data[i].startsWith("[")) {
+        value = JSON.parse(data[i]);
+      } else {
+        value = data[i]
+      }
       obj[fields[i]]= value;
     }
     return obj as T;
