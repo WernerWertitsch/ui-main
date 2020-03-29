@@ -1,0 +1,10 @@
+span.error {
+  color: red;
+}
+
+span.normal {
+  color: green;
+}
+.container {
+  font-size: smaller;
+}

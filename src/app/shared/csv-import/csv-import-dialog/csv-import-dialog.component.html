@@ -1,0 +1,33 @@
+<div class="top">
+  <span>Import from CSV</span>
+  <div style="float:right; cursor: pointer" (click)="cancel()">
+    <mat-icon>cancel</mat-icon>
+  </div>
+</div>
+<mat-card>
+  <input type="file" #fileInput ng2FileSelect (onFileSelected)="fileChosen($event)" />
+<!--  <ng2-file-input (onAction)="fileChosen($event)"></ng2-file-input>-->
+  <mat-toolbar><mat-toolbar-row>
+  <div style="width:80%">
+    <span>Delimiter: </span>
+    <select [(ngModel)]="delimiter" (change)="parseFile()">
+      <option value=";">;</option>
+      <option value=",">,</option>
+      <option value="|">|</option>
+      <option value="\t">TAB</option>
+    </select>
+  </div>
+  <div style="width:10%">
+    <button mat-raised-button *ngIf="fileList" (click)="parseFile()">Reload</button>
+  </div>
+  </mat-toolbar-row></mat-toolbar>
+
+  <app-generic-entity-table [entities]="currentEntities"></app-generic-entity-table>
+  <button (click)="confirmed()" *ngIf="fileList" mat-raised-button
+  class="buttom-button">Import</button>
+</mat-card>
+
+<app-tiny-log></app-tiny-log>
+
+
+
