@@ -38,9 +38,11 @@ export class PersonClientService extends AbstractGraphqlService {
   }
 
   createPerson(person: Person): Observable<Person> {
-    let personAsString = JSON.stringify(person);
+    let personAsString = this.removePropertyNameApostrophes(JSON.stringify(person)
+      .replace("\{", "\(")
+      .replace("\}", "\)"));
     return this.mutation<Person>(`mutation {
-      createPerson(${personAsString})
+      createPerson${personAsString}
        {
         id
         lastname
@@ -50,9 +52,28 @@ export class PersonClientService extends AbstractGraphqlService {
         birthdate
         dateCreated
       }
-    }`, "findAllPersons", undefined);
+    }`, "createPerson", undefined);
   }
 
+  //TODO this can be done more elegantly
+  private removePropertyNameApostrophes(propertyDef: string): string {
+    const arraySeparation = propertyDef.split("\[");
+    const ret: string[] = [];
+    for(let x=0; x<arraySeparation.length; x++) {
+      const lines = arraySeparation[x].split(",");
+      const cleanedLines: string[] = [];
+      for(let i=0; i<lines.length; i++) {
+        if(lines[i].indexOf(":")>0) {
+          const line = lines[i].split(":");
+          line[0] = line[0].replace("\"", "").replace("\"", "");
+          lines[i] = line.join("\:");
+        }
+        // cleanedLines.push(line.join(":"));
+      }
+      ret.push(lines.join("\,\n\r"))
+    }
+    return ret.join("\[");
+  }
 
 
 }

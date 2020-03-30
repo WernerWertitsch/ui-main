@@ -9,7 +9,7 @@ import {FileUploader} from "ng2-file-upload";
 @Component({
   selector: 'app-filedialog',
   templateUrl: './csv-import-dialog.component.html',
-  styleUrls: ['./csv-import-dialog.component.css']
+  styleUrls: ['./csv-import-dialog.component.scss']
 })
 export class CsvImportDialogComponent<T extends BaseEntity> implements OnInit {
   @Output()
@@ -17,11 +17,13 @@ export class CsvImportDialogComponent<T extends BaseEntity> implements OnInit {
 
 
   fileList: File[];
-  public uploader:FileUploader = new FileUploader({url: ''});
+  public uploader:FileUploader = new FileUploader({url: 'htt://orf.at'});
   currentEntities: Subject<BaseEntity[]> = new ReplaySubject();
   firstLoadHappened = false;
   delimiter = "";
   importer: Importer<any>;
+
+  hasBaseDropZoneOver: boolean = false;
 
 
   constructor(private tinyLogService: TinyLogService,
@@ -61,6 +63,10 @@ export class CsvImportDialogComponent<T extends BaseEntity> implements OnInit {
       let file: File = this.fileList[i];
       this.importer.load(file);
     }
+  }
+
+  fileOverBase($event) {
+    this.hasBaseDropZoneOver = $event;
   }
 
   cancel(): void {

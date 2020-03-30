@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {PersonClientService} from "../../service/person-client.service";
-import {forkJoin, merge, Observable, of} from "rxjs";
+import {BehaviorSubject, forkJoin, merge, Observable, of} from "rxjs";
 import {Person} from "../../domain";
 import {MatDialog} from "@angular/material/dialog";
 import {CsvImportDialogComponent} from "../../../../shared/csv-import/csv-import-dialog/csv-import-dialog.component";
@@ -13,10 +13,16 @@ import {combineLatest, filter} from "rxjs/operators";
 })
 export class PersonViewComponent implements OnInit {
 
-  personList: Observable<Person[]>;
+  //TODO Hier behavioursubject machen, dann schauen warum das mapping des mutation return objects nicht funktioniert
+
+
+
+  personList: BehaviorSubject<Person[]> = new BehaviorSubject([]);
 
   constructor(private dialog: MatDialog, private clientService: PersonClientService) {
-    this.personList = this.clientService.watchAllPersons();
+      this.clientService.watchAllPersons().subscribe(ps => {
+        this.personList.next(ps);
+      });
   }
 
 
@@ -29,10 +35,10 @@ export class PersonViewComponent implements OnInit {
     persons.forEach(p => {
       all.push(this.clientService.createPerson(p));
     });
-    combineLatest(forkJoin(all), this.personList),
-      ([imported, original]: [Person[], Person[]]) => {
-        this.personList = of(imported.concat(original));
-      }
+    merge(forkJoin(all)).subscribe(
+      (r) => {
+          this.personList.next(r.concat(this.personList.value));
+      })
   }
 
   openImporter(): void {
@@ -43,7 +49,7 @@ export class PersonViewComponent implements OnInit {
       filter(ps =>
         ps != undefined && ps.length > 0))
       .subscribe(p =>
-        import(p))
+        this.import(p))
   }
 
 }

@@ -33,7 +33,8 @@ export abstract class AbstractGraphqlService {
       mutation: gql`${query}`
     }).pipe(
       tap(r => this.loadingEvent(false, queryName)),
-      map(r => r as T),
+      map(r =>
+        r.data[queryName] as T),
       catchError(err => {
         this.errorOccurred(err);
         this.loadingEvent(false, queryName);
