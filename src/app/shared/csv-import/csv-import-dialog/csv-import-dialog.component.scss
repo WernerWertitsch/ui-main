@@ -9,9 +9,10 @@
 .my-drop-zone {
   background-color: darkgreen;
   border-radius: 5px;
-  min-height:30px;
+  vertical-align: center;
+  min-height:50px;
 }
 
-.hasBaseDropZoneOver {
+.file-over {
   background-color: chartreuse;
 }

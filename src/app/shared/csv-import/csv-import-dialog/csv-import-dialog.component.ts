@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
 import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 import {BaseEntity} from "../../domain/base-domain";
-import {Importer} from "../importer";
+import {Importer, ImportProgress} from "../importer";
 import {TinyLogService} from "../../tiny-log/tiny-log.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {FileUploader} from "ng2-file-upload";
@@ -15,6 +15,7 @@ export class CsvImportDialogComponent<T extends BaseEntity> implements OnInit {
   @Output()
   dataChosen: EventEmitter<T[]> = new EventEmitter();
 
+  importProgress$: Observable<ImportProgress>;
 
   fileList: File[];
   public uploader:FileUploader = new FileUploader({url: 'htt://orf.at'});
@@ -36,6 +37,7 @@ export class CsvImportDialogComponent<T extends BaseEntity> implements OnInit {
 
   ngOnInit() {
     this.importer = new Importer(this.tinyLogService);
+    this.importProgress$ = this.importer.progress;
     this.delimiter = this.importer.delimiter;
 
     //TODO - Alle these layers of subjects should not be necessary..but when I hand over the subject of the importer nothing happens on next

@@ -13,22 +13,24 @@ import { GenericEntityTableComponent } from './csv-import/csv-import-dialog/gene
 import {MatIconModule} from "@angular/material/icon";
 import {FileUploadModule} from "ng2-file-upload";
 import {TinyLogService} from "./tiny-log/tiny-log.service";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 
 @NgModule({
   declarations: [CsvImportDialogComponent, TinyLogComponent, GenericEntityTableComponent],
   providers: [TinyLogService],
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatCardModule,
-    FlexLayoutModule,
-    MatInputModule,
-    MatToolbarModule,
-    MatDialogModule,
-    MatIconModule,
-    FileUploadModule,
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatCardModule,
+        FlexLayoutModule,
+        MatInputModule,
+        MatToolbarModule,
+        MatDialogModule,
+        MatIconModule,
+        FileUploadModule,
+        MatProgressBarModule,
+    ],
   exports: [
     FormsModule,
     MatCardModule,

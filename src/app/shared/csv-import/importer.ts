@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ReplaySubject} from 'rxjs';
+import {BehaviorSubject, ReplaySubject} from 'rxjs';
 import {BaseEntity} from "../domain/base-domain";
 import {TinyLogService} from "../tiny-log/tiny-log.service";
 
@@ -7,6 +7,7 @@ import {TinyLogService} from "../tiny-log/tiny-log.service";
 export class Importer<T extends BaseEntity> {
   readonly TYPE = "com.wecreate.services.person.model.Person";
   objects: ReplaySubject<T[]> = new ReplaySubject();
+  progress: BehaviorSubject<ImportProgress> = new BehaviorSubject<ImportProgress>(undefined);
 
   public delimiter: string=";";
 
@@ -20,6 +21,7 @@ export class Importer<T extends BaseEntity> {
       let result: T[] = [];
       this.tinyLogService.addMessage("Reading file, "+lines.length+" lines..", false);
       for(let i=1; i<lines.length; i++) {
+        this.progress.next({total: lines.length, processed: i, text: "lines[i"});
         if(lines[i].length>0) {
           let obj = this.createObject(lines[i], this.delimiter, fields, this.TYPE, forcedArrayFields);
           if(obj) {
@@ -30,6 +32,7 @@ export class Importer<T extends BaseEntity> {
       }
       this.tinyLogService.addMessage("Done reading file, "+lines.length+" lines processed..", false);
       this.objects.next(result);
+      this.progress.next(undefined);
     }
     reader.readAsText(blob, "UTF-8");
   }
@@ -68,4 +71,9 @@ export class Importer<T extends BaseEntity> {
   }
 }
 
+export interface ImportProgress {
+  total: number;
+  processed: number;
+  text: string;
+}
 

@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {AbstractGraphqlService} from "../../../shared/graphql/graphql-service";
 import {Apollo} from "apollo-angular";
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {Person} from "../domain";
 import {map} from "rxjs/operators";
+import {ImportProgress} from "../../../shared/csv-import/importer";
 
 const MAX_ERRORS = 5;
 
@@ -11,6 +12,7 @@ const MAX_ERRORS = 5;
   providedIn: 'root'
 })
 export class PersonClientService extends AbstractGraphqlService {
+
 
   constructor(apollo: Apollo) {
     super(apollo, MAX_ERRORS);

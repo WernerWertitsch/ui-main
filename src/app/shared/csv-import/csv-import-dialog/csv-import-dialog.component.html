@@ -5,37 +5,43 @@
   </div>
 </div>
 <mat-card>
-<!--  <input type="file" #fileInput ng2FileSelect [uploader]="uploader" (onFileSelected)="fileChosen($event)"/>-->
+  <!--  <input type="file" #fileInput ng2FileSelect [uploader]="uploader" (onFileSelected)="fileChosen($event)"/>-->
   <!--  <ng2-file-input (onAction)="fileChosen($event)"></ng2-file-input>-->
 
 
   <div>
     <div fxLayout="row" fxLayoutGap="10px">
-    <div fxFlex="20%">
-      <span>Delimiter: </span>
-      <select [(ngModel)]="delimiter" (change)="parseFile()" placeholder="delimiter">
-        <option value=";">;</option>
-        <option value=",">,</option>
-        <option value="|">|</option>
-        <option value="\t">TAB</option>
-      </select>
-    </div>
-    <div fxFlex="80%" ng2FileDrop
-         [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-         (fileOver)="fileOverBase($event)"
-         [uploader]="uploader"
-         (onFileDrop)="fileChosen($event)"
-         class="my-drop-zone">
-      Drop Files here
-    </div>
-    <div fxFlex="10%">
-      <button mat-raised-button *ngIf="fileList" (click)="parseFile()">Reload</button>
-    </div>
+      <div fxFlex="20%">
+        <span>Delimiter: </span>
+        <select [(ngModel)]="delimiter" (change)="parseFile()" placeholder="delimiter">
+          <option value=";">;</option>
+          <option value=",">,</option>
+          <option value="|">|</option>
+          <option value="\t">TAB</option>
+        </select>
+      </div>
+      <div fxFlex="80%" ng2FileDrop
+           [ngClass]="{'file-over': hasBaseDropZoneOver}"
+           (fileOver)="fileOverBase($event)"
+           [uploader]="uploader"
+           (onFileDrop)="fileChosen($event)"
+           class="my-drop-zone">
+        Drop Files here
+      </div>
+      <div fxFlex="10%">
+        <button mat-raised-button *ngIf="fileList" (click)="parseFile()">Reload</button>
+      </div>
     </div>
   </div>
 
   <div *ngIf="currentEntities | async as entities">
-    <app-generic-entity-table [entities]="currentEntities | async"></app-generic-entity-table>
+    <div *ngIf="!(importProgress$ | async)" style="min-height: 80%; max-height:80%; overflow-y: auto">
+      <app-generic-entity-table
+                                [entities]="currentEntities | async"></app-generic-entity-table>
+    </div>
+    <div *ngIf="importProgress$ | async as importProgress">
+      <mat-progress-bar [value]="importProgress.processed / importProgress.total"></mat-progress-bar>
+    </div>
     <button (click)="confirmed()" mat-raised-button class="buttom-button">Import</button>
   </div>
 </mat-card>
