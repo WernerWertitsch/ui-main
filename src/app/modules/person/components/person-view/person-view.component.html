@@ -1,18 +1,21 @@
 <mat-toolbar color="secondary">
   <mat-button-toggle (click)="showImporter=!showImporter" primary>
-    Import
+    {{showImporter ? 'Hide ':'Show '}}Import Window
   </mat-button-toggle>
-  <div *ngIf="progress$ | async as importProgress" fxLayout="row">
-    Loading ({{importProgress}}%)
-    <mat-progress-bar [value]="progress$| async" mode="determinate"></mat-progress-bar>
+  <div *ngIf="progress$ | async as progress" fxLayout="row">
+     ({{progress}}%)
+    <mat-progress-bar [value]="progress$ | async" mode="determinate"></mat-progress-bar>
   </div>
-  <div *ngIf="errs | async as es">
-    <span *ngFor="let e of es">{{e.message}}</span>
-  </div>
+
 </mat-toolbar>
+<div *ngIf="errs | async as es" style="max-height: 40px; overflow-y: auto">
+  <span *ngFor="let e of es">{{e.message}}</span>
+</div>
 <div fxLayout="row">
+  ({{progress$ | async}}%
   <div [fxFlex]="showImporter ? 20 : 100">
     <app-person-list [persons$]="personList"></app-person-list>
+    <mat-spinner *ngIf="!(personList | async)"></mat-spinner>
   </div>
   <div *ngIf="showImporter" fxFlex="80">
     <!--    <mat-expansion-panel title="Import">-->
@@ -20,3 +23,4 @@
     <!--    </mat-expansion-panel>-->
   </div>
 </div>
+

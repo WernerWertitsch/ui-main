@@ -19,6 +19,7 @@ export class PersonViewComponent implements OnInit {
   showImporter: boolean=false;
   errs: Observable<any>;
   progress$: BehaviorSubject<number> = new BehaviorSubject<number>(undefined);
+  loading$: Observable<string[]>;
   status: string;
 
   personList: BehaviorSubject<Person[]> = new BehaviorSubject([]);
@@ -32,7 +33,7 @@ export class PersonViewComponent implements OnInit {
 
 
   ngOnInit(): void {
-
+    this.loading$ = this.clientService.loading;
   }
 
   import(data: {filtered: Person[], all: Person[]}) {

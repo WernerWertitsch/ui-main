@@ -73,7 +73,7 @@ export class Importer<T extends BaseEntity> {
         if (data[i].startsWith("[")) {
           value = JSON.parse(data[i]);
         } else {
-          value = forcedArrayFields.indexOf(fields[i]) >= 0 ? [data[i].split(this.LIST_DELIMITER).map(s => s.trim())] : data[i];
+          value = forcedArrayFields.indexOf(fields[i]) >= 0 ? data[i].split(this.LIST_DELIMITER).map(s => s.trim()) : data[i];
         }
         obj[fields[i]] = value;
       }

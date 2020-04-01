@@ -22,6 +22,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import {MatSelectModule} from "@angular/material/select";
     MatButtonModule,
     MatButtonToggleModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     FormsModule,
@@ -63,7 +65,8 @@ import {MatSelectModule} from "@angular/material/select";
     MatButtonToggleModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatProgressSpinnerModule
   ]
 })
 export class SharedModule {
