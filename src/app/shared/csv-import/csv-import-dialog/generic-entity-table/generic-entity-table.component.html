@@ -1,5 +1,20 @@
-<input matInput [(ngModel)]="excludeFilter" (keyup)="filter()" class="input-field">
-<input matInput [(ngModel)]="includeFilter" (keyup)="filter()" class="input-field">
+<div fxLayout="column" fxLayoutGap="3px" fxLayoutGap.xs="5px">
+  <div fxLayout="row">
+    <span fxFlex="20">Exclude Filter: </span>
+    <input fxFlex="80" matInput [(ngModel)]="excludeFilter" (keyup)="filterChanged()" class="input-field">
+  </div>
+  <div fxLayout="row">
+    <span fxFlex="20">Include FIlter: </span>
+    <input fxFlex="80" matInput [(ngModel)]="includeFilter" (keyup)="filterChanged()" class="input-field">
+  </div>
+  <div fxLayout="row">
+    <span fxFlex="20">Exclude Empty:</span>
+    <div fxFlex="80"  fxLayoutGap="10px">
+      <mat-checkbox *ngFor="let column of columns"  [(ngModel)]="emptyFilter[column]" (change)="filterChanged()">{{column}}</mat-checkbox>
+    </div>
+  </div>
+</div>
+
 <table mat-table [dataSource]="dataSource" class="full-width">
   <!-- Position Column -->
   <ng-container *ngFor="let column of columns" [matColumnDef]="column">

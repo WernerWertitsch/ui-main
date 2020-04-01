@@ -1,2 +1,16 @@
-<button mat-icon-button (click)="openImporter()"><mat-icon>queue</mat-icon></button>
-<app-person-list [persons$]="personList"></app-person-list>
+<mat-toolbar>
+  Import:
+  <button mat-icon-button (click)="showImporter=!showImporter">
+    <mat-icon>queue</mat-icon>
+  </button>
+</mat-toolbar>
+<div fxLayout="row">
+  <div [fxFlex]="showImporter ? 20 : 100">
+    <app-person-list [persons$]="personList"></app-person-list>
+  </div>
+  <div *ngIf="showImporter" fxFlex="80">
+    <!--    <mat-expansion-panel title="Import">-->
+    <app-csv-import (dataChosen)="import($event)" [forcedArrayFields]="['phone','email']"></app-csv-import>
+    <!--    </mat-expansion-panel>-->
+  </div>
+</div>

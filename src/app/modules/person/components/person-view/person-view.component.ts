@@ -16,7 +16,7 @@ export class PersonViewComponent implements OnInit {
 
   //TODO Hier behavioursubject machen, dann schauen warum das mapping des mutation return objects nicht funktioniert
 
-
+  showImporter: boolean=false;
 
   personList: BehaviorSubject<Person[]> = new BehaviorSubject([]);
 
@@ -31,9 +31,9 @@ export class PersonViewComponent implements OnInit {
 
   }
 
-  import(persons: Person[]) {
+  import(data: {filtered: Person[], all: Person[]}) {
     const all: Observable<Person>[] = [];
-    persons.forEach(p => {
+    (data.filtered ? data.filtered : data.all).forEach(p => {
       all.push(this.clientService.createPerson(p));
     });
     merge(forkJoin(all)).subscribe(
@@ -42,16 +42,16 @@ export class PersonViewComponent implements OnInit {
       })
   }
 
-  openImporter(): void {
-    let dialogRef = this.dialog.open(CsvImportDialogComponent, {
-      width: "90%",
-      height: "80%"
-    });
-    dialogRef.afterClosed().pipe(
-      filter(ps =>
-        ps != undefined && ps.length > 0))
-      .subscribe(p =>
-        this.import(p))
-  }
+  // openImporter(): void {
+  //   let dialogRef = this.dialog.open(CsvImportDialogComponent, {
+  //     width: "90%",
+  //     height: "80%"
+  //   });
+  //   dialogRef.afterClosed().pipe(
+  //     filter(ps =>
+  //       ps != undefined && ps.length > 0))
+  //     .subscribe(p =>
+  //       this.import(p))
+  // }
 
 }

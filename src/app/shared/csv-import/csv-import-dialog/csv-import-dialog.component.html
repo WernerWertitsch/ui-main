@@ -1,53 +1,50 @@
 <div>
-  <div matDialogContent style="max-height: 80%">
-    <div class="top">
-      <span>Import from CSV</span>
-      <div style="float:right; cursor: pointer" (click)="cancel()">
-        <mat-icon>cancel</mat-icon>
+  <mat-card>
+    <mat-card-title>Import from CSV</mat-card-title>
+    <!--  <input type="file" #fileInput ng2FileSelect [uploader]="uploader" (onFileSelected)="fileChosen($event)"/>-->
+    <!--  <ng2-file-input (onAction)="fileChosen($event)"></ng2-file-input>-->
+    <div>
+      <div fxLayout="row" fxLayoutGap="10px">
+        <div fxFlex="20%">
+          <span>Delimiter: </span>
+          <select [(ngModel)]="delimiter" (change)="parseFile()" placeholder="delimiter">
+            <option value=";">;</option>
+            <option value=",">,</option>
+            <option value="|">|</option>
+            <option value="\t">TAB</option>
+          </select>
+        </div>
+        <div fxFlex="80%" ng2FileDrop fxFlexAlign="center"
+             [ngClass]="{'file-over': hasBaseDropZoneOver}"
+             (fileOver)="fileOverBase($event)"
+             [uploader]="uploader"
+             (onFileDrop)="fileChosen($event)"
+             class="my-drop-zone">
+          <span>Drop Files here to preview/filter</span>
+          <div *ngIf="fileList && fileList.length>0"></div><span *ngFor="let f of fileList">{{f.name}}</span>
+        </div>
+        <div fxFlex="10%">
+          <button mat-raised-button *ngIf="fileList" (click)="parseFile()">Reload</button>
+        </div>
       </div>
     </div>
-    <mat-card>
-      <!--  <input type="file" #fileInput ng2FileSelect [uploader]="uploader" (onFileSelected)="fileChosen($event)"/>-->
-      <!--  <ng2-file-input (onAction)="fileChosen($event)"></ng2-file-input>-->
-      <div>
-        <div fxLayout="row" fxLayoutGap="10px">
-          <div fxFlex="20%">
-            <span>Delimiter: </span>
-            <select [(ngModel)]="delimiter" (change)="parseFile()" placeholder="delimiter">
-              <option value=";">;</option>
-              <option value=",">,</option>
-              <option value="|">|</option>
-              <option value="\t">TAB</option>
-            </select>
-          </div>
-          <div fxFlex="80%" ng2FileDrop
-               [ngClass]="{'file-over': hasBaseDropZoneOver}"
-               (fileOver)="fileOverBase($event)"
-               [uploader]="uploader"
-               (onFileDrop)="fileChosen($event)"
-               class="my-drop-zone">
-            Drop Files here
-          </div>
-          <div fxFlex="10%">
-            <button mat-raised-button *ngIf="fileList" (click)="parseFile()">Reload</button>
-          </div>
-        </div>
-      </div>
-      <div *ngIf="importProgress$ | async as importProgress">
-        <mat-progress-bar [value]="importProgress.processed / importProgress.total"></mat-progress-bar>
-      </div>
-      <div *ngIf="currentEntities | async as entities">
-        <div *ngIf="!(importProgress$ | async)" style="min-height: 80%; max-height:80%; overflow-y: auto">
-          <app-generic-entity-table
-            [entities]="currentEntities | async"></app-generic-entity-table>
-        </div>
 
-        <button (click)="confirmed()" mat-raised-button class="buttom-button">Import</button>
-      </div>
-    </mat-card>
+    <div *ngIf="importProgress$ | async as importProgress">
+      Loading ({{importProgress}}%)
+      <mat-progress-bar [value]="importProgress$ | async" mode="determinate"></mat-progress-bar>
+    </div>
+    <div *ngIf="currentEntities | async as entities">
+<!--      <div *ngIf="!(importProgress$ | async)">-->
+        <button (click)="confirmed()" [disabled]="importProgress$ | async" mat-raised-button class="buttom-button">Push to Server</button>
+        <app-generic-entity-table
+          [entities]="currentEntities | async" (filteredEntities)="entitiesFilteredInTable($event)"></app-generic-entity-table>
+<!--      </div>-->
+    </div>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>Log</mat-expansion-panel-header>
+      <app-tiny-log></app-tiny-log>
+    </mat-expansion-panel>
 
-    <app-tiny-log></app-tiny-log>
+  </mat-card>
 
-
-  </div>
 </div>

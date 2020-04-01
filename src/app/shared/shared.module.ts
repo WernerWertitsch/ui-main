@@ -16,6 +16,8 @@ import {TinyLogService} from "./tiny-log/tiny-log.service";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatExpansionModule} from "@angular/material/expansion";
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 
 @NgModule({
@@ -33,7 +35,9 @@ import {MatPaginatorModule} from "@angular/material/paginator";
     FileUploadModule,
     MatProgressBarModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatExpansionModule,
+    MatCheckboxModule
   ],
   exports: [
     FormsModule,
@@ -41,7 +45,11 @@ import {MatPaginatorModule} from "@angular/material/paginator";
     FlexLayoutModule,
     MatInput,
     FileUploadModule,
-    MatDialogModule
+    MatDialogModule,
+    MatExpansionModule,
+    CsvImportDialogComponent,
+    MatToolbarModule,
+    MatCheckboxModule
   ]
 })
 export class SharedModule {
