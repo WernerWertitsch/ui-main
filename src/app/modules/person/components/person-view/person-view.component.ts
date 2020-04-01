@@ -16,7 +16,7 @@ export class PersonViewComponent implements OnInit {
 
   //TODO Hier behavioursubject machen, dann schauen warum das mapping des mutation return objects nicht funktioniert
 
-  showImporter: boolean=false;
+  showImporter: boolean = false;
   errs: Observable<any>;
   progress$: BehaviorSubject<number> = new BehaviorSubject<number>(undefined);
   loading$: Observable<string[]>;
@@ -25,10 +25,10 @@ export class PersonViewComponent implements OnInit {
   personList: BehaviorSubject<Person[]> = new BehaviorSubject([]);
 
   constructor(private dialog: MatDialog, private clientService: PersonClientService) {
-      this.clientService.watchAllPersons().subscribe(ps => {
-        this.personList.next(ps);
-      });
-      this.errs = this.clientService.errs;
+    this.clientService.watchAllPersons().subscribe(ps => {
+      this.personList.next(ps);
+    });
+    this.errs = this.clientService.errs;
   }
 
 
@@ -36,29 +36,28 @@ export class PersonViewComponent implements OnInit {
     this.loading$ = this.clientService.loading;
   }
 
-  import(data: {filtered: Person[], all: Person[]}) {
+  import(data: { filtered: Person[], all: Person[] }) {
     const all: Observable<Person>[] = [];
     const d = data.filtered ? data.filtered : data.all;
     this.status = "Pushing imported to Server";
     d.forEach((p, index) => {
-      try {
-        setTimeout(t => {
-          if(index==d.length-1) {
+      setTimeout(t => {
+        try {
+          if (index == d.length - 1) {
             this.progress$.next(undefined);
           } else {
-            this.progress$.next(Math.round(index/d.length*100));
+            this.progress$.next(Math.round(index / d.length * 100));
           }
-        }, 0);
-        all.push(this.clientService.createPerson(p));
-      } catch (e) {
-        this.clientService.errorOccurred(e);
-      }
-
+          all.push(this.clientService.createPerson(p));
+        } catch (e) {
+          this.clientService.errorOccurred(e);
+        }
+      }, 30*index)
     });
     merge(forkJoin(all)).subscribe(
       (r) => {
-          this.personList.next(r.concat(this.personList.value));
-          this.status = "";
+        this.personList.next(r.concat(this.personList.value));
+        this.status = "";
       })
   }
 

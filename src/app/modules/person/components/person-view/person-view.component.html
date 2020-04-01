@@ -6,7 +6,9 @@
      ({{progress}}%)
     <mat-progress-bar [value]="progress$ | async" mode="determinate"></mat-progress-bar>
   </div>
-
+  <div *ngIf="loading$ | async as loading">
+    <mat-spinner *ngIf="loading.length<1"> {{loading}} Processes Running</mat-spinner>
+  </div>
 </mat-toolbar>
 <div *ngIf="errs | async as es" style="max-height: 40px; overflow-y: auto">
   <span *ngFor="let e of es">{{e.message}}</span>
@@ -15,7 +17,6 @@
   ({{progress$ | async}}%
   <div [fxFlex]="showImporter ? 20 : 100">
     <app-person-list [persons$]="personList"></app-person-list>
-    <mat-spinner *ngIf="!(personList | async)"></mat-spinner>
   </div>
   <div *ngIf="showImporter" fxFlex="80">
     <!--    <mat-expansion-panel title="Import">-->

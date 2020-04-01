@@ -48,6 +48,7 @@ export abstract class AbstractGraphqlService {
       if (l.indexOf(logName) < 0) {
         l.push(logName);
       }
+      this.loading.next(l);   //DONNERSTAG -> SET TIMEOUT HIER, oder warum geht das nicht?
     } else {
       this.removeFromLoading(logName);
     }
