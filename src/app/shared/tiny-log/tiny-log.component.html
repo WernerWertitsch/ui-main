@@ -1,12 +1,11 @@
 <!--<app-expander title="Log" (stateChangeIsOpen)="opened($event)" [boldTitle]="newItems()">-->
-<h4>{{newItems()}}</h4>
-  <div class="container">
-    <button mat-raised-button clear (click)="clear()">Clear</button>
-    <div *ngIf="messages() && messages().length>0">
-      <div *ngFor="let message of messages()">
-        <div [class]="message.error ? 'error' : 'normal'">{{message.time | date:'dd.MM-hh:mm:ss'}}: {{message.text}}</div>
-      </div>
-    <div *ngIf="!messages() || messages().length<1"> Nothing happened yet...</div>
+<h4>{{newItems() ? '(new entries)' : 'no new entries'}}</h4>
+<div class="container">
+  <button mat-raised-button clear (click)="clear()" *ngIf="messages()">Clear</button>
+  <div *ngIf="messages() && messages().length>0">
+    <div *ngFor="let message of messages()">
+      <div [class]="message.error ? 'error' : 'normal'">{{message.time | date:'dd.MM-hh:mm:ss'}}: {{message.text}}</div>
+    </div>
   </div>
-  </div>
+</div>
 <!--</app-expander>-->

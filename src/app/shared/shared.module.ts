@@ -18,6 +18,10 @@ import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatButtonModule} from "@angular/material/button";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatSelectModule} from "@angular/material/select";
 
 
 @NgModule({
@@ -37,7 +41,11 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     MatTableModule,
     MatPaginatorModule,
     MatExpansionModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   exports: [
     FormsModule,
@@ -49,7 +57,13 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     MatExpansionModule,
     CsvImportDialogComponent,
     MatToolbarModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatButtonModule,
+    MatIconModule,
+    MatButtonToggleModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatProgressBarModule
   ]
 })
 export class SharedModule {

@@ -1,7 +1,10 @@
 <div *ngIf="filteredPersons$ | async as persons">
   <div class="top-bar">
     <div fxFlex="80%">
-      Voll Text Filter: <input matInput #filterField [(ngModel)]="fullTextFilter" (keyup)="searchTrigger($event)">
+      <mat-form-field>
+        <label for="filterField">Full Text Search</label>
+        <input matInput id="filterField" #filterField [(ngModel)]="fullTextFilter" (keyup)="searchTrigger($event)" placeholder="Full Text Search">
+      </mat-form-field>
     </div>
     <div fxFles="20%"><h4>{{persons.length}} Persons </h4></div>
   </div>

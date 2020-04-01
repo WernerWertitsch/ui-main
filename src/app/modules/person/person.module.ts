@@ -7,17 +7,16 @@ import {PersonListComponent} from "./components/person-list/person-list.componen
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
 
 
 
 @NgModule({
   declarations: [PersonListComponent, PersonComponent, PersonViewComponent],
-  imports: [
-    CommonModule,
-    SharedModule,
-    MatButtonModule,
-    MatIconModule,
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+    ],
   exports: [PersonViewComponent]
 })
 export class PersonModule { }

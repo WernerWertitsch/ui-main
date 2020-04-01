@@ -17,6 +17,9 @@ export class PersonViewComponent implements OnInit {
   //TODO Hier behavioursubject machen, dann schauen warum das mapping des mutation return objects nicht funktioniert
 
   showImporter: boolean=false;
+  errs: Observable<any>;
+  progress$: BehaviorSubject<number> = new BehaviorSubject<number>(undefined);
+  status: string;
 
   personList: BehaviorSubject<Person[]> = new BehaviorSubject([]);
 
@@ -24,6 +27,7 @@ export class PersonViewComponent implements OnInit {
       this.clientService.watchAllPersons().subscribe(ps => {
         this.personList.next(ps);
       });
+      this.errs = this.clientService.errs;
   }
 
 
@@ -33,12 +37,27 @@ export class PersonViewComponent implements OnInit {
 
   import(data: {filtered: Person[], all: Person[]}) {
     const all: Observable<Person>[] = [];
-    (data.filtered ? data.filtered : data.all).forEach(p => {
-      all.push(this.clientService.createPerson(p));
+    const d = data.filtered ? data.filtered : data.all;
+    this.status = "Pushing imported to Server";
+    d.forEach((p, index) => {
+      try {
+        setTimeout(t => {
+          if(index==d.length-1) {
+            this.progress$.next(undefined);
+          } else {
+            this.progress$.next(Math.round(index/d.length*100));
+          }
+        }, 0);
+        all.push(this.clientService.createPerson(p));
+      } catch (e) {
+        this.clientService.errorOccurred(e);
+      }
+
     });
     merge(forkJoin(all)).subscribe(
       (r) => {
           this.personList.next(r.concat(this.personList.value));
+          this.status = "";
       })
   }
 

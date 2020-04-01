@@ -95,7 +95,7 @@ export class GenericEntityTableComponent<T> implements OnInit {
 
   filterChanged() {
     this.dataSource.filter = this.excludeFilter + "######" + this.includeFilter;
-    this.filteredEntities.emit(this.dataSource.filteredData);
+    this.filteredEntities.emit(this.dataSource.filteredData.length == this.dataSource.data.length ? undefined: this.dataSource.filteredData);
     // this.combinedFilter = this.includeFilter + "######" + this.excludeFilter;
   }
 

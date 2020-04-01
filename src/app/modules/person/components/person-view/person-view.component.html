@@ -1,8 +1,14 @@
-<mat-toolbar>
-  Import:
-  <button mat-icon-button (click)="showImporter=!showImporter">
-    <mat-icon>queue</mat-icon>
-  </button>
+<mat-toolbar color="secondary">
+  <mat-button-toggle (click)="showImporter=!showImporter" primary>
+    Import
+  </mat-button-toggle>
+  <div *ngIf="progress$ | async as importProgress" fxLayout="row">
+    Loading ({{importProgress}}%)
+    <mat-progress-bar [value]="progress$| async" mode="determinate"></mat-progress-bar>
+  </div>
+  <div *ngIf="errs | async as es">
+    <span *ngFor="let e of es">{{e.message}}</span>
+  </div>
 </mat-toolbar>
 <div fxLayout="row">
   <div [fxFlex]="showImporter ? 20 : 100">
