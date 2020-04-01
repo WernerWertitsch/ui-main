@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 import {BaseEntity} from "../../domain/base-domain";
 import {Importer, ImportProgress} from "../importer";
@@ -17,9 +17,10 @@ export class CsvImportDialogComponent<T extends BaseEntity> implements OnInit {
 
   importProgress$: Observable<ImportProgress>;
 
+
   fileList: File[];
   public uploader:FileUploader = new FileUploader({url: 'htt://orf.at'});
-  currentEntities: Subject<BaseEntity[]> = new ReplaySubject();
+  currentEntities: BehaviorSubject<BaseEntity[]> = new BehaviorSubject(undefined);
   firstLoadHappened = false;
   delimiter = "";
   importer: Importer<any>;
@@ -56,6 +57,7 @@ export class CsvImportDialogComponent<T extends BaseEntity> implements OnInit {
   }
 
   parseFile() {
+    this.currentEntities.next(undefined);
     if(!this.fileList) {
       console.log("=======> NO FILE WAS SELECTED");
       return;
@@ -72,14 +74,13 @@ export class CsvImportDialogComponent<T extends BaseEntity> implements OnInit {
   }
 
   cancel(): void {
+    this.currentEntities.next(undefined);
     this.dialogRef.close();
   }
 
   confirmed(): void {
     //hier evtl doch this.currentEntites.subscribe
-    this.currentEntities.subscribe((entities) => {
-        this.dialogRef.close(entities);
-    });
+    this.dialogRef.close(this.currentEntities.value);
   }
 
 }

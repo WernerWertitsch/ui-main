@@ -5,6 +5,7 @@ import {Person} from "../../domain";
 import {MatDialog} from "@angular/material/dialog";
 import {CsvImportDialogComponent} from "../../../../shared/csv-import/csv-import-dialog/csv-import-dialog.component";
 import {combineLatest, filter} from "rxjs/operators";
+import {ScrollStrategyOptions} from "@angular/cdk/overlay";
 
 @Component({
   selector: 'app-person-view',
@@ -43,7 +44,8 @@ export class PersonViewComponent implements OnInit {
 
   openImporter(): void {
     let dialogRef = this.dialog.open(CsvImportDialogComponent, {
-      width: '80%'
+      width: "90%",
+      height: "80%"
     });
     dialogRef.afterClosed().pipe(
       filter(ps =>
