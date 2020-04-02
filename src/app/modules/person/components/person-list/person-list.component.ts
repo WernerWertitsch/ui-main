@@ -26,7 +26,7 @@ export class PersonListComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.filteredPersons$ = combineLatest(
+    setTimeout(t => this.filteredPersons$ = combineLatest(
       // fromEvent(this.filterField.nativeElement, "keyup"),
       this.searchTrigger$,
       this.persons$).pipe(
@@ -35,7 +35,7 @@ export class PersonListComponent implements OnInit, AfterViewInit {
           p => this.eligableForFilter(p)
         );
         return ret;
-      }));
+      })), 0);
   }
 
   eligableForFilter(person: Person) {

@@ -47,31 +47,10 @@ export class PersonViewComponent implements OnInit {
     // d.map(p => {
     //   this.clientService.createPerson(p)
     // })
-
-    d.forEach((p, index) => {
-      setTimeout(t => {
-        try {
-          this.clientService.createPerson(p).pipe(
-            tap(p => {
-              setTimeout(t=> {
-                this.progress$.next(index == d.length - 1 ? undefined : Math.round(index / d.length * 100));
-              }, 0);
-              // this.personList.next(this.personList.value.concat(p));
-            })
-          ).subscribe(p => {
-            this.personList.next(this.personList.value.concat(p));
-          });
-        } catch (e) {
-          this.clientService.errorOccurred(e);
-        }
-      }, index*20);
+    this.clientService.createPersons(d).subscribe(ps => {
+      this.personList.next(this.personList.value.concat(ps));
     });
-    //   merge(forkJoin(all)).subscribe(
-    //     (r) => {
-    //
-    //       this.status = "";
-    //     })
-    // }, 0)
+
   }
 
   // openImporter(): void {

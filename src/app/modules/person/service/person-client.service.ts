@@ -40,10 +40,36 @@ export class PersonClientService extends AbstractGraphqlService {
     );
   }
 
+  createPersons(persons: Person[]): Observable<Person> {
+    // let personAsString = this.removePropertyNameApostrophes(JSON.stringify(person)
+    //   .replace("\{", "\(")
+    //   .replace("\}", "\)"));
+    const bulkObject = JSON.stringify({
+      persons: persons
+    }).replace(/"([^"]+)":/g, '$1:');;
+    return this.mutation<Person>(`mutation {
+      createPersons(input: ${bulkObject})
+       {
+        id
+        lastname
+        firstname
+        email
+        phone
+        birthdate
+        dateCreated
+      }
+    }`, "createPersons", undefined);
+  }
+
   createPerson(person: Person): Observable<Person> {
+
     let personAsString = this.removePropertyNameApostrophes(JSON.stringify(person)
       .replace("\{", "\(")
       .replace("\}", "\)"));
+
+    // Try if this works..
+    // const personAsString = JSON.stringify(person).replace(/"([^"]+)":/g, '$1:');
+
     return this.mutation<Person>(`mutation {
       createPerson${personAsString}
        {
