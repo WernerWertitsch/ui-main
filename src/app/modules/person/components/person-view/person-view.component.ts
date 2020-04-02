@@ -4,7 +4,7 @@ import {BehaviorSubject, forkJoin, merge, Observable, of} from "rxjs";
 import {Person} from "../../domain";
 import {MatDialog} from "@angular/material/dialog";
 import {CsvImportDialogComponent} from "../../../../shared/csv-import/csv-import-dialog/csv-import-dialog.component";
-import {combineLatest, filter} from "rxjs/operators";
+import {combineLatest, filter, map, tap} from "rxjs/operators";
 import {ScrollStrategyOptions} from "@angular/cdk/overlay";
 
 @Component({
@@ -19,7 +19,7 @@ export class PersonViewComponent implements OnInit {
   showImporter: boolean = false;
   errs: Observable<any>;
   progress$: BehaviorSubject<number> = new BehaviorSubject<number>(undefined);
-  loading$: Observable<string[]>;
+  loading$: Observable<boolean>;
   status: string;
 
   personList: BehaviorSubject<Person[]> = new BehaviorSubject([]);
@@ -28,37 +28,50 @@ export class PersonViewComponent implements OnInit {
     this.clientService.watchAllPersons().subscribe(ps => {
       this.personList.next(ps);
     });
-    this.errs = this.clientService.errs;
+    this.errs = this.clientService.errs$;
   }
 
 
   ngOnInit(): void {
-    this.loading$ = this.clientService.loading;
+    this.loading$ = this.clientService.loading$.pipe(
+      map(l => l.length>0)
+    );
+    // this.loading$.subscribe(x =>
+    //   console.log(x));
   }
 
   import(data: { filtered: Person[], all: Person[] }) {
     const all: Observable<Person>[] = [];
     const d = data.filtered ? data.filtered : data.all;
     this.status = "Pushing imported to Server";
+    // d.map(p => {
+    //   this.clientService.createPerson(p)
+    // })
+
     d.forEach((p, index) => {
       setTimeout(t => {
         try {
-          if (index == d.length - 1) {
-            this.progress$.next(undefined);
-          } else {
-            this.progress$.next(Math.round(index / d.length * 100));
-          }
-          all.push(this.clientService.createPerson(p));
+          this.clientService.createPerson(p).pipe(
+            tap(p => {
+              setTimeout(t=> {
+                this.progress$.next(index == d.length - 1 ? undefined : Math.round(index / d.length * 100));
+              }, 0);
+              // this.personList.next(this.personList.value.concat(p));
+            })
+          ).subscribe(p => {
+            this.personList.next(this.personList.value.concat(p));
+          });
         } catch (e) {
           this.clientService.errorOccurred(e);
         }
-      }, 30*index)
+      }, index*20);
     });
-    merge(forkJoin(all)).subscribe(
-      (r) => {
-        this.personList.next(r.concat(this.personList.value));
-        this.status = "";
-      })
+    //   merge(forkJoin(all)).subscribe(
+    //     (r) => {
+    //
+    //       this.status = "";
+    //     })
+    // }, 0)
   }
 
   // openImporter(): void {

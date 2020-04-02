@@ -5,6 +5,7 @@ import {BehaviorSubject, Observable} from "rxjs";
 import {Person} from "../domain";
 import {map} from "rxjs/operators";
 import {ImportProgress} from "../../../shared/csv-import/importer";
+import {TinyLogService} from "../../../shared/tiny-log/tiny-log.service";
 
 const MAX_ERRORS = 5;
 
@@ -14,8 +15,8 @@ const MAX_ERRORS = 5;
 export class PersonClientService extends AbstractGraphqlService {
 
 
-  constructor(apollo: Apollo) {
-    super(apollo, MAX_ERRORS);
+  constructor(apollo: Apollo, tinyLogService: TinyLogService) {
+    super(apollo, tinyLogService, MAX_ERRORS);
   }
 
   watchAllPersons(): Observable<Person[]> {

@@ -33,7 +33,7 @@ export class Importer<T extends BaseEntity> {
             percentage: index / lines.length * 100,
             total: lines.length,
             processed: index,
-            text: "lines[i"
+            text: lines[index]
           } :
             undefined), 0);
 
@@ -64,7 +64,7 @@ export class Importer<T extends BaseEntity> {
     const obj = new Object();
     try {
       let data = line.split(delimiter);
-      if (!data || data.length < 2) {
+      if (!data || data.length != fields.length) {
         this.tinyLogService.addMessage("The delimiter '" + delimiter + "' does not seem to work for line " + line + ". Try another delimiter", true);
         return undefined;
       }
@@ -73,7 +73,9 @@ export class Importer<T extends BaseEntity> {
         if (data[i].startsWith("[")) {
           value = JSON.parse(data[i]);
         } else {
-          value = forcedArrayFields.indexOf(fields[i]) >= 0 ? data[i].split(this.LIST_DELIMITER).map(s => s.trim()) : data[i];
+          value = forcedArrayFields.indexOf(fields[i]) >= 0 ?
+            data[i].trim()!="" ? data[i].split(this.LIST_DELIMITER).map(s => s.trim()) : undefined :
+            data[i];
         }
         obj[fields[i]] = value;
       }

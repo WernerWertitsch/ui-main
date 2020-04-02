@@ -44,9 +44,9 @@ export class CsvImportDialogComponent<T extends BaseEntity> implements OnInit {
       map(p => p==undefined? undefined : Math.round(p.percentage))
     );
 
-    this.importProgress$.subscribe( e => {
-      console.log(e);
-    });
+    // this.importProgress$.subscribe( e => {
+    //   console.log(e);
+    // });
     this.delimiter = this.importer.delimiter;
 
     //TODO - Alle these layers of subjects should not be necessary..but when I hand over the subject of the importer nothing happens on next
@@ -77,7 +77,6 @@ export class CsvImportDialogComponent<T extends BaseEntity> implements OnInit {
   parseFile() {
     this.currentEntities.next(undefined);
     if(!this.fileList) {
-      console.log("=======> NO FILE WAS SELECTED");
       return;
     }
     this.importer.delimiter = this.delimiter;
