@@ -36,6 +36,16 @@ export class PersonListComponent implements OnInit, AfterViewInit {
         );
         return ret;
       })), 0);
+
+  }
+
+
+
+  personList: Person[];
+  filterList: Person[];
+
+  reInitFilter() {
+    this.filterList = this.personList.filter(p => this.eligableForFilter(p));
   }
 
   eligableForFilter(person: Person) {
