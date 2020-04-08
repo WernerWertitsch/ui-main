@@ -28,8 +28,6 @@
     "apollo-client": "^2.6.0",
     "apollo-link": "^1.2.11",
     "flexlayout": "^1.0.6",
-    "graphql": "^14.5.0",
-    "graphql-tag": "^2.10.0",
     "ng2-file-upload": "^1.4.0",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",

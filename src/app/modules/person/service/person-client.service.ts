@@ -1,23 +1,26 @@
 import {Injectable} from '@angular/core';
-import {AbstractGraphqlService} from "../../../shared/graphql/graphql-service";
+import {GenericRestService} from "../../../shared/graphql/generic-rest-service";
 import {Apollo} from "apollo-angular";
 import {BehaviorSubject, Observable} from "rxjs";
 import {Person} from "../domain";
 import {map} from "rxjs/operators";
 import {ImportProgress} from "../../../shared/csv-import/importer";
 import {TinyLogService} from "../../../shared/tiny-log/tiny-log.service";
+import {HttpClient} from "@angular/common/http";
 
 const MAX_ERRORS = 5;
 
 @Injectable({
   providedIn: 'root'
 })
-export class PersonClientService extends AbstractGraphqlService {
+export class PersonClientService extends GenericRestService<Person> {
 
-
-  constructor(apollo: Apollo, tinyLogService: TinyLogService) {
-    super(apollo, tinyLogService, MAX_ERRORS);
+  constructor(httpClient: HttpClient, tinyLogService: TinyLogService) {
+    super(httpClient, tinyLogService, MAX_ERRORS);
   }
+
+  navigate
+
 
   watchAllPersons(): Observable<Person[]> {
     return this.watch<Person[]>(`query {
