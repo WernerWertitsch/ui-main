@@ -3,9 +3,10 @@ import {PersonClientService} from "../../service/person-client.service";
 import {BehaviorSubject, forkJoin, merge, Observable, of} from "rxjs";
 import {Person} from "../../domain";
 import {MatDialog} from "@angular/material/dialog";
-import {CsvImportDialogComponent} from "../../../../shared/csv-import/csv-import-dialog/csv-import-dialog.component";
+import {CsvImportDialogComponent} from "../../../../shared/components/csv-import/csv-import-dialog/csv-import-dialog.component";
 import {combineLatest, filter, map, tap} from "rxjs/operators";
 import {ScrollStrategyOptions} from "@angular/cdk/overlay";
+import {PageState} from "../../../../shared/service/rest/pagable-rest-service";
 
 @Component({
   selector: 'app-person-view',
@@ -20,14 +21,12 @@ export class PersonViewComponent implements OnInit {
   errs: Observable<any>;
   progress$: BehaviorSubject<number> = new BehaviorSubject<number>(undefined);
   loading$: Observable<boolean>;
+  pageState$: Observable<PageState<Person>>;
   status: string;
 
-  personList: BehaviorSubject<Person[]> = new BehaviorSubject([]);
 
   constructor(private dialog: MatDialog, private clientService: PersonClientService) {
-    this.clientService.watchAllPersons().subscribe(ps => {
-      this.personList.next(ps);
-    });
+    this.pageState$ = this.clientService.pageState$;
     this.errs = this.clientService.errs$;
   }
 
@@ -47,9 +46,7 @@ export class PersonViewComponent implements OnInit {
     // d.map(p => {
     //   this.clientService.createPerson(p)
     // })
-    this.clientService.createPersons(d).subscribe(ps => {
-      this.personList.next(this.personList.value.concat(ps));
-    });
+    this.clientService.pushBulk(d);
 
   }
 

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
-import {BaseEntity} from "../../domain/base-domain";
+import {BaseEntity} from "../../../domain/base-domain";
 import {Importer, ImportProgress} from "../importer";
 import {TinyLogService} from "../../tiny-log/tiny-log.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
-import {BaseEntity} from "../domain/base-domain";
+import {BaseEntity} from "../../domain/base-domain";
 import {TinyLogService} from "../tiny-log/tiny-log.service";
 
 

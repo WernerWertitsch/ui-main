@@ -1,13 +1,15 @@
 import {Apollo} from "apollo-angular";
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {catchError, map, tap} from "rxjs/operators";
-import {TinyLogService} from "../tiny-log/tiny-log.service";
+import {TinyLogService} from "../../components/tiny-log/tiny-log.service";
 import {HttpClient} from "@angular/common/http";
-import {BaseEntity} from "../domain/base-domain";
+import {BaseEntity} from "../../domain/base-domain";
 
 export abstract class GenericRestService<T extends BaseEntity> {
   loading$: BehaviorSubject<string[]> = new BehaviorSubject([]);
   errs$: BehaviorSubject<any[]> = new BehaviorSubject([]);
+
+  // lastListUrl: string;
 
   constructor(private httpClient: HttpClient, private tinyLogService: TinyLogService, private maxErrs: number = 5) {
   }
@@ -33,6 +35,7 @@ export abstract class GenericRestService<T extends BaseEntity> {
     )
   }
 
+
   getListPageFromCompleteUrl(url: string): Observable<ListResponse<T>> {
     return this.getListPage(url);
   }
@@ -42,6 +45,7 @@ export abstract class GenericRestService<T extends BaseEntity> {
              errorReturnValue=[]): Observable<ListResponse<T>> {
     this.tinyLogService.addMessage("(list) GET "+url, false);
     const finalUrl = this.getFinalUrl(url, paging, parameters);
+    // this.lastListUrl = finalUrl;
     const eventName="(list)GET"+finalUrl;
     this.loadingEvent(true, eventName);
     return this.httpClient.get(finalUrl).pipe(
@@ -69,7 +73,7 @@ export abstract class GenericRestService<T extends BaseEntity> {
     )
   }
 
-  postEntity<T>(url: string, entity: T): Observable<T> {
+  postEntity<T>(url: string, entity: T | T[]): Observable<T> {
     const eventName="POST"+url;
     return this.httpClient.post(url, entity).pipe(
       map((e: T) => {
@@ -83,7 +87,7 @@ export abstract class GenericRestService<T extends BaseEntity> {
     )
   }
 
-  putEntity<T>(url: string, entity: T): Observable<T> {
+  putEntity<T>(url: string, entity: T | T[]): Observable<T> {
     const eventName="PUT"+url;
     return this.httpClient.put(url, entity).pipe(
       map((e: T) => {

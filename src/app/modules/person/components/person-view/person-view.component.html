@@ -31,9 +31,9 @@
     </mat-expansion-panel>
   </div>
   <div fxLayout="row">
-    <div [fxFlex]="showImporter ? 20 : 100">
-      <app-person-list [persons$]="personList"></app-person-list>
-      <mat-panel-title *ngIf="!(personList | async) || (personList | async).length<1">No Data Found</mat-panel-title>
+    <div [fxFlex]="showImporter ? 20 : 100" *ngIf="pageState$ | async as pageState">
+      <app-person-list  [pageState$]="pageState$"></app-person-list>
+      <mat-panel-title *ngIf="!pageState.data || pageState.data.length<1">No Data Found</mat-panel-title>
     </div>
     <div *ngIf="showImporter" fxFlex="80">
       <app-csv-import (dataChosen)="import($event)" [forcedArrayFields]="['phone','email']"></app-csv-import>
