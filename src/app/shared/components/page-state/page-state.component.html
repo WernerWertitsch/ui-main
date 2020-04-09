@@ -1,13 +1,23 @@
-<div *ngIf="pageState$ | async as pageState">
-  <div fxLayout="row" fxLayoutAlign="space-between">
-    <span>{{pageState.pageInfo.page}} / {{pageState.pageInfo.totalPages}}</span>
-    <span>{{pageState.pageInfo.totalElements}} Entries, {{pageState.pageInfo.size}} per page</span>
+<div *ngIf="pageState$ | async as pageState" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="left center">
+  <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="5px">
+    <span>{{pageState.pageInfo.size}} per page, {{pageState.pageInfo.totalElements}} Entries total,  </span>
+    <span>Page {{pageState.pageInfo.page + 1}} / {{pageState.pageInfo.totalPages}}</span>
   </div>
-  <div fxLayout="row" fxLayoutAlign="space-evenly">
-    <button mat-icon-button (click)="navigate(navOptions.first)"><mat-icon>first_page</mat-icon></button>
-    <button mat-icon-button (click)="navigate(navOptions.prev)"><mat-icon>chevron_left</mat-icon></button>
-    <button mat-icon-button (click)="navigate(navOptions.next)"><mat-icon>chevron_right</mat-icon></button>
-    <button mat-icon-button (click)="navigate(navOptions.last)"><mat-icon>last_page</mat-icon></button>
+  <div *ngIf="pageState.navigation" fxLayout="row" fxLayoutAlign="space-evenly">
+    <button [disabled]="pageState.pageInfo.page === 0" mat-icon-button (click)="navigate(navOptions.first)">
+      <mat-icon>first_page</mat-icon>
+    </button>
+    <button [disabled]="pageState.pageInfo.page === 0" mat-icon-button (click)="navigate(navOptions.prev)">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <button [disabled]="pageState.pageInfo.page === pageState.pageInfo.totalPages -1" mat-icon-button
+            (click)="navigate(navOptions.next)">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+    <button [disabled]="pageState.pageInfo.page === pageState.pageInfo.totalPages -1" mat-icon-button
+            (click)="navigate(navOptions.last)">
+      <mat-icon>last_page</mat-icon>
+    </button>
   </div>
 
 </div>

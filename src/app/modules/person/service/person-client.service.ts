@@ -1,13 +1,8 @@
 import {Injectable} from '@angular/core';
-import {GenericRestService} from "../../../shared/service/rest/generic-rest-service";
-import {Apollo} from "apollo-angular";
-import {BehaviorSubject, Observable} from "rxjs";
 import {Person} from "../domain";
-import {map} from "rxjs/operators";
-import {ImportProgress} from "../../../shared/components/csv-import/importer";
 import {TinyLogService} from "../../../shared/components/tiny-log/tiny-log.service";
 import {HttpClient} from "@angular/common/http";
-import {PagableRestService, PageState} from "../../../shared/service/rest/pagable-rest-service";
+import {PagableRestService} from "../../../shared/service/rest/pagable-rest-service";
 
 
 @Injectable({
@@ -16,7 +11,7 @@ import {PagableRestService, PageState} from "../../../shared/service/rest/pagabl
 export class PersonClientService extends PagableRestService<Person> {
 
   baseUrl: string = "/people";
-  baseUrlFuzzy: string = "/people/fuzzy";
+  baseUrlFuzzy: string = "/people/search/fuzzy";
   baseUrlBulk: string = "/people/bulk";
 
 
@@ -25,16 +20,19 @@ export class PersonClientService extends PagableRestService<Person> {
   }
 
   load(searchKey:string) {
-    if(searchKey) {
-      super.load(this.baseUrl);
+    const pageInfo = {...this.pageState$.value.pageInfo, ...{page: 0}};
+    super.nextPageState({...this.pageState$.value, ...{pageInfo: pageInfo}});
+    if(!searchKey) {
+      super.fetch(this.baseUrl);
     } else {
       const parameter = {
         n1: searchKey,
         n2: searchKey
       }
-      super.load(this.baseUrlFuzzy, parameter);
+      super.fetch(this.baseUrlFuzzy, false, parameter);
     }
   }
+
 
   pushBulk(people: Person[]) {
     super.import(this.baseUrlBulk, people);

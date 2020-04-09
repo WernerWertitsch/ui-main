@@ -24,6 +24,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { PageStateComponent } from './components/page-state/page-state.component';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { PageStateComponent } from './components/page-state/page-state.component
     MatButtonToggleModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    BrowserAnimationsModule
   ],
   exports: [
     FormsModule,
@@ -67,10 +69,11 @@ import { PageStateComponent } from './components/page-state/page-state.component
     MatSelectModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
-
+    BrowserAnimationsModule,
     TinyLogComponent,
     PageStateComponent,
-    CsvImportDialogComponent
+    CsvImportDialogComponent,
+    MatInputModule
   ]
 })
 export class SharedModule {

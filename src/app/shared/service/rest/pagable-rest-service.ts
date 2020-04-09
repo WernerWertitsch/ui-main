@@ -1,50 +1,85 @@
-import {GenericRestService, HrefNavigation, NavOptions, PagingRequest, PagingResponse} from "./generic-rest-service";
+import {
+  GenericRestService,
+  HrefNavigation,
+  ListResponse,
+  NavOptions,
+  PagingRequest,
+  PagingResponse
+} from "./generic-rest-service";
 import {BaseEntity} from "../../domain/base-domain";
 import {map, tap} from "rxjs/operators";
 import {BehaviorSubject, Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {TinyLogService} from "../../components/tiny-log/tiny-log.service";
+const defaultPageInfo: PageInfo = {
+  size: 50,
+  totalElements: undefined,
+  totalPages: undefined,
+  page: 0,
+  sort: undefined,
+  number: undefined  //is the same as page, but as it comes in the response, maybe take it out, its not needed probably
+}
 
+/*
+  A few things might seem awkawrd. Reasons:
+  with REST we get back NavigationLinks ("prec", "start", "next", etc) which we can use 1:1 when paging, except when the pageSoue changes
+  if we dont have navigation links (first time laod) or cant reuse them (eg when changing page size) we use the PageInfo Object
+  in the pageState (which shoould procude similar paraemters to the ones in the returned navigation urls
+ */
 export abstract class PagableRestService<T extends BaseEntity> extends GenericRestService<T> {
-  readonly defaultResponsePageInfo: CurrentPage = {
-    size: 50,
-    totalElements: undefined,
-    totalPages: undefined,
-    page: 0,
-    sort: undefined,
-    number: undefined  //is the same as page, but as it comes in the response, maybe take it out, its not needed probably
-  }
+  readonly defaultPageState: PageState<T>  = {
+    data: undefined,
+    loading: false,
+    pageInfo: defaultPageInfo,
+    navigation: undefined
+  } as PageState<T>;
 
   lastListUrl: string;
-  pageState$: BehaviorSubject<PageState<T>> = new BehaviorSubject(undefined);
+  lastParameters: { [id: string]: string } = undefined;
+  pageState$: BehaviorSubject<PageState<T>> = new BehaviorSubject(this.defaultPageState);
 
 
   constructor(httpClient: HttpClient, tinyLogService: TinyLogService) {
     super(httpClient, tinyLogService);
   }
 
-  navigate(url: string, navOption: NavOptions) {
+  navigate(navOption: NavOptions) {
     const navUrl = this.pageState$.value.navigation[navOption.toString()];
-    this.load(navUrl);
+    this.fetch(navUrl, true);
   }
 
 
   reload() {
-    this.load(this.lastListUrl);
+    this.fetch(this.lastListUrl, true);
   }
 
-  load(url: string, parameter: { [id: string]: string } = undefined): void {
+
+  changePageSizeAndReload(size: number) {
+    // first set the new size in the page object
+    const pageInfo = {...this.pageState$.value.pageInfo, ...{size:size, page: 0}};
+    this.nextPageState({...this.pageState$.value, ...{pageInfo: pageInfo}});
+    //then fetch again, but omit the parameters from lasturl-string if there where any. As a result we need to use the lastParameters again
+    this.fetch(this.lastListUrl.split("\?")[0], false, this.lastParameters);
+  }
+
+
+  protected fetch(url: string, omitPaging: boolean = false, parameter: { [id: string]: string } = undefined): void {
     this.lastListUrl = url;
-    super.getListPage<T>(url, this.pageState$.value.pageInfo, parameter).pipe(
+    this.lastParameters = parameter;
+    const pageState = this.pageState$.value;
+    this.nextPageState(pageState, true);
+    super.getListPage<T>(url, omitPaging ? undefined : this.pageState$.value.pageInfo, parameter).pipe(
       map(r => {
-        const pageState = this.pageState$.value;
-        this.nextPageState(pageState, true);
         return {
           pageInfo: {...pageState.pageInfo, ...r.page},
           navigation: r.navigation,
           data: r.data,
           loading: false
         } as PageState<T>
+      }),
+      map((p: PageState<T>) => {
+        const n = {...p.pageInfo, ...{page: p.pageInfo.number}};
+        return {...p, ...{pageInfo:n}} as PageState<T>
       })
     ).subscribe(pageState => {
       this.nextPageState(pageState);
@@ -95,30 +130,11 @@ export abstract class PagableRestService<T extends BaseEntity> extends GenericRe
     this.nextPageState(newState);
   }
 
-  // private getUrlKey(url: string) {
-  //   const index = url.indexOf(this.relUrl)+this.relUrl.length;
-  //   return url.substr(index);
-  // }
-  //
-  // private getPageStateForUrl(url: string) {
-  //   return this.getPageState(this.getUrlKey(url));
-  // }
-
-  // private getPageState(key: string): PageState<T> {
-  //   if(!this.pageStates$[key]) {
-  //     this.pageStates$[key]= new BehaviorSubject({
-  //       pageInfo: {...this.defaultResponsePageInfo},
-  //       navigation: undefined,
-  //       data: undefined} as PageState<T>);
-  //   }
-  //   return this.pageStates$[key].value;
-  // }
-
-  private nextLoading(loading: boolean) {
+  protected nextLoading(loading: boolean) {
     this.nextPageState(this.pageState$.value, loading);
   }
 
-  private nextPageState(newPageState: PageState<T>, loading: boolean = false) {
+  protected nextPageState(newPageState: PageState<T>, loading: boolean = false) {
     this.pageState$.next(this.setLoading(newPageState, loading));
   }
 
@@ -128,13 +144,13 @@ export abstract class PagableRestService<T extends BaseEntity> extends GenericRe
 
 }
 
-export interface CurrentPage extends PagingResponse, PagingRequest {
+export interface PageInfo extends PagingResponse, PagingRequest {
 }
 
 
-export class PageState<T> {
-  pageInfo: CurrentPage = undefined;
-  navigation: HrefNavigation = undefined;
-  data: T[];
-  loading: boolean = false;
+export interface PageState<T> {
+  pageInfo: PageInfo;
+  navigation: HrefNavigation;
+  data;
+  loading: boolean;
 }

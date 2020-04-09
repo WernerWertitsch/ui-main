@@ -1,7 +1,6 @@
 <div>
   <div fxLayout="row"
-       fxLayoutGap="20px" class="mat-background-secondary" style="width: 100%; background-color: gray"
-  >
+       fxLayoutGap="20px" class="mat-background-secondary" style="width: 100%; background-color: gray">
     <div fxFlex="10">
       <mat-panel-title><h4>Persons</h4></mat-panel-title>
     </div>
@@ -31,10 +30,15 @@
     </mat-expansion-panel>
   </div>
   <div fxLayout="row">
-    <div [fxFlex]="showImporter ? 20 : 100" *ngIf="pageState$ | async as pageState">
-      <app-person-list  [pageState$]="pageState$"></app-person-list>
-      <mat-panel-title *ngIf="!pageState.data || pageState.data.length<1">No Data Found</mat-panel-title>
-    </div>
+    <div [fxFlex]="showImporter ? 20 : 100">
+      <app-person-list  [pageState$]="pageState$"
+                        (filterChanged)="loadEvent($event)"
+                        (navigationEvent)="navigationEvent($event)"
+                        (pageSizeChanged)="pageSizeEvent($event)"></app-person-list>
+      <div *ngIf="pageState$ | async as pageState">
+        <mat-panel-title *ngIf="!pageState.data || pageState.data.length<1">No Data Found</mat-panel-title>
+      </div>
+      </div>
     <div *ngIf="showImporter" fxFlex="80">
       <app-csv-import (dataChosen)="import($event)" [forcedArrayFields]="['phone','email']"></app-csv-import>
     </div>

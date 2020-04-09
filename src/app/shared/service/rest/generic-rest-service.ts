@@ -1,4 +1,3 @@
-import {Apollo} from "apollo-angular";
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {catchError, map, tap} from "rxjs/operators";
 import {TinyLogService} from "../../components/tiny-log/tiny-log.service";
@@ -55,11 +54,28 @@ export abstract class GenericRestService<T extends BaseEntity> {
         if(!r['_embedded']) { //List
           throw new Error("Expected List for URL but no list was embedded:"+url)
         }
+        const listKey = Object.keys(r['_embedded'])[0];
+        if(!listKey) {
+          throw new Error("Response was invalid, _embedded was present, but no entity list")
+        }
         return {
-          data: r['_embedded'].map(t => {return {...t, ...{self: this.selfLink(t)}}}) as T[],
+          data: r['_embedded'][listKey].map(t => {
+            return {...t, ...{self: this.selfLink(t)}}}) as T[],
           page: r['page'] as PagingResponse,
           navigation: r['_links'] as HrefNavigation
         } as ListResponse<T>;
+      }),
+      //remove the basepath (eg "localhost:8080/", we dont need it here TODO check if we might need to without proxy.conf
+      map((p: ListResponse<T>) => {
+        const n = p.navigation;
+        const ret = {}
+        for (let pKey in p.navigation) {
+          const href = p.navigation[pKey].href;
+          const start = href.indexOf(url);
+          //we use the original url to determine where (eg) "localhost:8080/ends", but to compare we need to remove the parameters, thatshhy the "split"
+          ret[pKey] = href.substr(href.indexOf(url.split("\?")[0]));
+        }
+        return {...p, ...{navigation: ret}} as ListResponse<T>;
       }),
       catchError(err => {
         this.errorOccurred(err);
@@ -124,11 +140,19 @@ export abstract class GenericRestService<T extends BaseEntity> {
 
 //sort string should be "firstname&firstname.desc"
   private getFinalUrl(url: string, paging: PagingRequest, parameters: {[id: string]: string}):string {
-    const withPaging = paging ? `${url}?sort=${paging.sort}&page=${paging.page}&size=${paging.size}` : url;
+    if(!paging && !parameters) {
+      return url;
+    }
+    const withPaging =
+      paging ?
+      `${url}?page=${paging.page}&size=${paging.size}${paging.sort ? '&sort='+paging.sort : ''}`
+      : url;
     if(parameters) {
-      const paramsAsString = Object.keys(parameters).map((k, index) =>
-        `${index==0 && !paging ? '?' : '&'}${parameters[k]}`);
-      return `withPaging&${paramsAsString}`
+      const paramsAsString =
+        `${!paging ? '?' : '&'}` +
+        Object.keys(parameters).map((k, index) =>
+          `${k}=${parameters[k]}`).join('&');
+      return `${withPaging}${paramsAsString}`
     }
     return withPaging;
   }
@@ -152,6 +176,7 @@ export abstract class GenericRestService<T extends BaseEntity> {
 
   errorOccurred(err: any) {
     this.tinyLogService.addMessage(err.message, true);
+    console.log(err);
     const errs = this.errs$.getValue();
     this.errs$.next([...[err], ...(errs.length >= this.maxErrs ? errs.slice(0, errs.length - 1) : errs)]);
   }
@@ -199,7 +224,7 @@ export interface ListResponse<T> {
 
 export enum NavOptions {
   first= "first",
-  prev = "prec",
+  prev = "prev",
   next = "next",
   last = "last"
 }

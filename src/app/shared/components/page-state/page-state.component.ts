@@ -21,11 +21,16 @@ export class PageStateComponent<T extends BaseEntity> implements OnInit {
   @Output()
   navigation: EventEmitter<NavOptions> = new EventEmitter<NavOptions>();
 
+
+
   ngOnInit(): void {
+
   }
 
   navigate(navOption: NavOptions) {
     this.navigation.emit(navOption);
   }
+
+
 
 }

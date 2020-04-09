@@ -7,6 +7,7 @@ import {CsvImportDialogComponent} from "../../../../shared/components/csv-import
 import {combineLatest, filter, map, tap} from "rxjs/operators";
 import {ScrollStrategyOptions} from "@angular/cdk/overlay";
 import {PageState} from "../../../../shared/service/rest/pagable-rest-service";
+import {NavOptions} from "../../../../shared/service/rest/generic-rest-service";
 
 @Component({
   selector: 'app-person-view',
@@ -23,6 +24,7 @@ export class PersonViewComponent implements OnInit {
   loading$: Observable<boolean>;
   pageState$: Observable<PageState<Person>>;
   status: string;
+  currentFilter: string;
 
 
   constructor(private dialog: MatDialog, private clientService: PersonClientService) {
@@ -35,6 +37,10 @@ export class PersonViewComponent implements OnInit {
     this.loading$ = this.clientService.loading$.pipe(
       map(l => l.length>0)
     );
+
+    // the actual Loading will be triggered by the first filter declaration (empty string)
+
+    // this.load();
     // this.loading$.subscribe(x =>
     //   console.log(x));
   }
@@ -47,7 +53,23 @@ export class PersonViewComponent implements OnInit {
     //   this.clientService.createPerson(p)
     // })
     this.clientService.pushBulk(d);
+  }
 
+  load() {
+    this.loadEvent('');
+  }
+
+  loadEvent(filter: string) {
+    this.currentFilter = filter;
+    this.clientService.load(this.currentFilter);
+  }
+
+  navigationEvent(navOption: NavOptions) {
+    this.clientService.navigate(navOption);
+  }
+
+  pageSizeEvent(newPageSize: number) {
+    this.clientService.changePageSizeAndReload(newPageSize);
   }
 
   // openImporter(): void {
