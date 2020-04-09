@@ -1,5 +1,5 @@
 {
-  "/person": {
-    "target": "http://localhost:8080/people"
+  "/people": {
+    "target": "http://localhost:8080"
   }
 }

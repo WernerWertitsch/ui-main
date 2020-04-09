@@ -117,7 +117,9 @@ export abstract class PagableRestService<T extends BaseEntity> extends GenericRe
 
   import(url: string, entities: T[]) {
     this.nextLoading(true);
-    super.postEntity(url, entities)
+    super.postEntity(url, entities).subscribe(
+      l => this.reload()
+    )
   }
 
   private updatePageStatesWithEntity(newEntity: T): void {
