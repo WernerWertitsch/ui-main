@@ -1,0 +1,11 @@
+<div class="top-bar" fxLayout="row" fxLayoutAlign="space-between center">
+  <div fxFlex="50%">
+    <app-filter-field (filterChanged)="searchTriggerd($event)"></app-filter-field>
+  </div>
+  <div fxFlex="5">
+    <app-paging [pageState$]="pageState$" (pageSizeChanged)="pageSizeChanged()" (navigationEvent)="navigation($event)"></app-paging>
+  </div>
+</div>
+<div class="cardList">
+  <ng-content></ng-content>
+</div>

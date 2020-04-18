@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PageStateComponent } from './page-state.component';
+import { FilterFieldComponent } from './filter-field.component';
 
-describe('PageStateComponent', () => {
-  let component: PageStateComponent;
-  let fixture: ComponentFixture<PageStateComponent>;
+describe('FilterFieldComponent', () => {
+  let component: FilterFieldComponent;
+  let fixture: ComponentFixture<FilterFieldComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PageStateComponent ]
+      declarations: [ FilterFieldComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PageStateComponent);
+    fixture = TestBed.createComponent(FilterFieldComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
-import {BaseEntity} from "../../domain/base-domain";
+import {BaseEntity} from "../../../domain/base-domain";
 import {TinyLogService} from "../tiny-log/tiny-log.service";
 
 
 export class Importer<T extends BaseEntity> {
   readonly TYPE = "com.wecreate.services.person.model.Person";
-  objects: ReplaySubject<T[]> = new ReplaySubject();
-  progress: BehaviorSubject<ImportProgress> = new BehaviorSubject<ImportProgress>(undefined);
+  objects$: ReplaySubject<T[]> = new ReplaySubject();
+  progress$: BehaviorSubject<ImportProgress> = new BehaviorSubject<ImportProgress>(undefined);
 
   public delimiter: string = ";";
   private LIST_DELIMITER: string = ",";
@@ -28,7 +28,7 @@ export class Importer<T extends BaseEntity> {
         if(index==0) {
           return
         }
-        setTimeout(t => this.progress.next(
+        setTimeout(t => this.progress$.next(
           index < lines.length-1 ? {
             percentage: index / lines.length * 100,
             total: lines.length,
@@ -46,7 +46,7 @@ export class Importer<T extends BaseEntity> {
         }
       })
       this.tinyLogService.addMessage("Done reading file, " + lines.length + " lines processed..", false);
-      this.objects.next(result);
+      this.objects$.next(result);
     }
     reader.readAsText(blob, "UTF-8");
   }

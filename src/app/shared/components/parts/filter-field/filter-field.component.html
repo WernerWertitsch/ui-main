@@ -1,0 +1,8 @@
+<div fxFlex="50%">
+  <mat-form-field appearance="legacy">
+    <mat-label style="color: black">Search By Name</mat-label>
+    <input matInput id="filterField" #filterField [(ngModel)]="fullTextFilter" (keyup)="searchTrigger($event)"
+           placeholder="Search-Text">
+    <mat-hint>in last and first name</mat-hint>
+  </mat-form-field>
+</div>

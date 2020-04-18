@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {BaseEntity} from "../../../../domain/base-domain";
+import {BaseEntity} from "../../../../../domain/base-domain";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 
@@ -8,6 +8,9 @@ import {MatPaginator} from "@angular/material/paginator";
   templateUrl: './generic-entity-table.component.html',
   styleUrls: ['./generic-entity-table.component.scss']
 })
+/**
+ * This component is a bit redundant, but self-contained (for imports), so lets leave it like it is
+ */
 export class GenericEntityTableComponent<T> implements OnInit {
 
   @Input()

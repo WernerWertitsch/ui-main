@@ -10,7 +10,7 @@ import {BaseEntity} from "../../domain/base-domain";
 import {map, tap} from "rxjs/operators";
 import {BehaviorSubject, Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
-import {TinyLogService} from "../../components/tiny-log/tiny-log.service";
+import {TinyLogService} from "../../components/parts/tiny-log/tiny-log.service";
 const defaultPageInfo: PageInfo = {
   size: 50,
   totalElements: undefined,
@@ -43,18 +43,18 @@ export abstract class PagableRestService<T extends BaseEntity> extends GenericRe
     super(httpClient, tinyLogService);
   }
 
-  navigate(navOption: NavOptions) {
+  public navigate(navOption: NavOptions) {
     const navUrl = this.pageState$.value.navigation[navOption.toString()];
     this.fetch(navUrl, true);
   }
 
 
-  reload() {
+  public reload() {
     this.fetch(this.lastListUrl, true);
   }
 
 
-  changePageSizeAndReload(size: number) {
+  public changePageSizeAndReload(size: number) {
     // first set the new size in the page object
     const pageInfo = {...this.pageState$.value.pageInfo, ...{size:size, page: 0}};
     this.nextPageState({...this.pageState$.value, ...{pageInfo: pageInfo}});
@@ -86,7 +86,7 @@ export abstract class PagableRestService<T extends BaseEntity> extends GenericRe
     })
   }
 
-  loadSingle(url: string, replaceEntityInList: boolean = true, reloadList: boolean = false): void {
+  protected loadSingle(url: string, replaceEntityInList: boolean = true, reloadList: boolean = false): void {
     this.nextLoading(true);
     super.getSingle<T>(url).subscribe(e => {
       if (reloadList) {
@@ -100,7 +100,7 @@ export abstract class PagableRestService<T extends BaseEntity> extends GenericRe
     })
   }
 
-  save(url: string, entity: T, updateListsOnPosts: boolean = true, reloadListOnPost: boolean = true) {
+  public save(url: string, entity: T, updateListsOnPosts: boolean = true, reloadListOnPost: boolean = true) {
     this.nextLoading(true);
     let obs = entity.id ? super.putEntity<T>(url, entity) : super.postEntity(url, entity);
     obs.subscribe(e => {
@@ -115,7 +115,7 @@ export abstract class PagableRestService<T extends BaseEntity> extends GenericRe
     })
   }
 
-  import(url: string, entities: T[]) {
+  public import(url: string, entities: T[]) {
     this.nextLoading(true);
     super.postEntity(url, entities).subscribe(
       l => this.reload()

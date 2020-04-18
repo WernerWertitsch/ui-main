@@ -1,6 +1,6 @@
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {catchError, map, tap} from "rxjs/operators";
-import {TinyLogService} from "../../components/tiny-log/tiny-log.service";
+import {TinyLogService} from "../../components/parts/tiny-log/tiny-log.service";
 import {HttpClient} from "@angular/common/http";
 import {BaseEntity} from "../../domain/base-domain";
 
@@ -13,7 +13,7 @@ export abstract class GenericRestService<T extends BaseEntity> {
   constructor(private httpClient: HttpClient, private tinyLogService: TinyLogService, private maxErrs: number = 5) {
   }
 
-  getSingle<T>(url: string, errorReturnValue: any = undefined): Observable<T> {
+  public getSingle<T>(url: string, errorReturnValue: any = undefined): Observable<T> {
     this.tinyLogService.addMessage("GET "+url, false);
     const eventName="GET"+url;
     this.loadingEvent(true, eventName);
@@ -35,11 +35,11 @@ export abstract class GenericRestService<T extends BaseEntity> {
   }
 
 
-  getListPageFromCompleteUrl(url: string): Observable<ListResponse<T>> {
+  protected getListPageFromCompleteUrl(url: string): Observable<ListResponse<T>> {
     return this.getListPage(url);
   }
 
-  getListPage<T>(url: string, paging: PagingRequest = undefined,
+  protected getListPage<T>(url: string, paging: PagingRequest = undefined,
              parameters: {[id:string]:string} = undefined,
              errorReturnValue=[]): Observable<ListResponse<T>> {
     this.tinyLogService.addMessage("(list) GET "+url, false);
@@ -89,7 +89,7 @@ export abstract class GenericRestService<T extends BaseEntity> {
     )
   }
 
-  postEntity<T>(url: string, entity: T | T[]): Observable<T> {
+  protected postEntity<T>(url: string, entity: T | T[]): Observable<T> {
     const eventName="POST"+url;
     return this.httpClient.post(url, entity).pipe(
       map((e: T) => {
@@ -103,7 +103,7 @@ export abstract class GenericRestService<T extends BaseEntity> {
     )
   }
 
-  putEntity<T>(url: string, entity: T | T[]): Observable<T> {
+  protected putEntity<T>(url: string, entity: T | T[]): Observable<T> {
     const eventName="PUT"+url;
     return this.httpClient.put(url, entity).pipe(
       map((e: T) => {
@@ -117,7 +117,7 @@ export abstract class GenericRestService<T extends BaseEntity> {
     )
   }
 
-  deleteEntity<T>(url: string): Observable<boolean> {
+  protected deleteEntity<T>(url: string): Observable<boolean> {
     const eventName="DELETE"+url;
     return this.httpClient.delete(url).pipe(
       map((e: T) => true),
@@ -174,7 +174,7 @@ export abstract class GenericRestService<T extends BaseEntity> {
     }, 0);
   }
 
-  errorOccurred(err: any) {
+  protected errorOccurred(err: any) {
     this.tinyLogService.addMessage(err.message, true);
     console.log(err);
     const errs = this.errs$.getValue();
@@ -196,6 +196,7 @@ export abstract class GenericRestService<T extends BaseEntity> {
   }
 }
 
+// export? proceted possible?
 export interface HrefNavigation {
   first: string;
   prev: string;

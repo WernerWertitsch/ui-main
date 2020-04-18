@@ -1,0 +1,5 @@
+<ng-container *ngIf="entities$ | async as entities">
+  <ng-container *ngFor="let entity of entities">
+    <ng-container *ngTemplateOutlet="$entityComponent; context: {$implicit: entity}"></ng-container>
+  </ng-container>
+</ng-container>
