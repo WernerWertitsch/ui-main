@@ -1,0 +1,56 @@
+<div>
+  <div fxLayout="row"
+       fxLayoutGap="20px" class="mat-background-secondary" style="width: 100%; background-color: gray">
+    <div fxFlex="10">
+      <mat-panel-title><h4>{{title$ | async}}</h4></mat-panel-title>
+    </div>
+    <div fxLayout="row" fxFlex="60">
+      <div *ngIf="progress$ | async as progress" fxLayout="row">
+        <span>({{progress}}%)</span>
+      </div>
+      <div *ngIf="loading$ | async as loading" fxLayout="row">
+        <mat-spinner diameter="40" [value]="1"></mat-spinner>
+      </div>
+    </div>
+    <div fxFlex="30" fxLayoutAlign="end">
+      <mat-button-toggle (click)="showImporter=!showImporter" primary [disabled]="loading$ | async">
+        {{showImporter ? 'Hide ' : 'Show '}}Importer
+      </mat-button-toggle>
+      <mat-button-toggle (click)="showAsTable=!showAsTable">
+        {{showAsTable ? 'Normal View ' : 'Table View '}}Importer
+      </mat-button-toggle>
+    </div>
+  </div>
+  <mat-progress-bar [value]="progress$ | async" mode="determinate">Processing</mat-progress-bar>
+  <div>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        Log
+      </mat-expansion-panel-header>
+      <app-tiny-log></app-tiny-log>
+    </mat-expansion-panel>
+  </div>
+  <ng-container *ngIf="pageState$ | async as pageState">
+    <div *ngIf="pageState.data.length > 0" fxLayout="row">
+      <app-filter-field (filterChanged)="loadEvent($event)"></app-filter-field>
+      <app-list-navigation [pageState$]="pageState$" (navigation)="navigationEvent($event)"
+                           (pageSizeChanged)="pageSizeEvent($event)">
+      </app-list-navigation>
+    </div>
+    <div fxLayout="row">
+      <div [fxFlex]="showImporter ? 20 : 100">
+        <app-pure-entity-list *ngIf="!showAsTable"
+                              [$entityComponent]="$listElement" [pageState$]="pageState$"></app-pure-entity-list>
+        <app-pure-entity-table *ngIf="showAsTable"
+                               [entities]="pageState.data"></app-pure-entity-table>
+      </div>
+    </div>
+  </ng-container>
+  <div *ngIf="showImporter" fxFlex="80">
+    <app-csv-import (dataChosen)="import($event)" [forcedArrayFields]="['phone','email']"></app-csv-import>
+  </div>
+</div>
+
+<!--<div *ngIf="errs | async as es" style="max-height: 40px; overflow-y: auto">-->
+<!--  <span *ngFor="let e of es">{{e.message}}</span>-->
+<!--</div>-->
