@@ -22,8 +22,12 @@ export class PersonViewComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.personClientService.load();
   }
 
+  clientService(): PersonClientService {
+    return this.personClientService;
+  }
 
 
 }

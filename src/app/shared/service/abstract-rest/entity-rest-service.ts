@@ -7,12 +7,14 @@ import {EntityService} from "../entity-service";
 import {Observable, of} from "rxjs";
 
 export abstract class EntityRestService<T extends BaseEntity> extends PagableRestService<T> implements EntityService<T>{
+  baseUrl: string
   baseUrlFuzzy: string;
   baseUrlBulk: string;
 
   constructor(private entityName: string, httpClient: HttpClient, tinyLogService: TinyLogService) {
     super( httpClient, tinyLogService);
-    this.entityName = `/${this.entityName}/search/fuzzy`;
+    this.baseUrl = `/${this.entityName}`;
+    this.baseUrlFuzzy = `/${this.entityName}/search/fuzzy`;
     this.baseUrlBulk = `/${this.entityName}/bulk`;
   }
 
@@ -20,14 +22,14 @@ export abstract class EntityRestService<T extends BaseEntity> extends PagableRes
     const pageInfo = {...this.pageState$.value.pageInfo, ...{page: 0}};
     super.nextPageState({...this.pageState$.value, ...{pageInfo: pageInfo}});
     if(!searchParams) {
-      super.fetch(this.entityName);
+      super.fetch(this.baseUrl);
     } else {
       super.fetch(this.baseUrlFuzzy, false, searchParams);
     }
   }
 
   public getPageTitle$(): Observable<string> {
-    return of(this.entityName.split("/")[this.entityName.split("/").length-1]);
+    return of(this.entityName);
   }
 
   public pushBulk(entities: T[]) {

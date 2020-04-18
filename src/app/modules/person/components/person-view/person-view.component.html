@@ -2,4 +2,6 @@
   <app-person [person]="person"></app-person>
 </ng-template>
 
-<app-entity-list-frame [$listElement]="entityComponent" [entityService]="personClientService"></app-entity-list-frame>
+<app-entity-list-frame [$listElement]="entityComponent"
+                       [entityService]="clientService()"
+                       [fullTextSearchFieldNames]="['firstName', 'lastName']"></app-entity-list-frame>

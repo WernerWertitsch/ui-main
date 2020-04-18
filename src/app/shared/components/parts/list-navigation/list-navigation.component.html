@@ -1,4 +1,4 @@
-<div *ngIf="pageState$ | async as pageState" ##>
+<div *ngIf="pageInfo$ | async as pageInfo" ##>
   <div fxFlex="5">
     <mat-select [(ngModel)]="sizePerPage" (selectionChange)="pageSize()" style="background-color: grey;">
       <mat-option [value]="3">3</mat-option>
@@ -10,23 +10,23 @@
   </div>
 
   <div fxFles="40%">
-    <div *ngIf="pageState$ | async as pageState" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="left center">
+    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="left center">
       <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="5px">
-        <span>{{pageState.pageInfo.size}} per page, {{pageState.pageInfo.totalElements}} Entries total,  </span>
-        <span>Page {{pageState.pageInfo.page + 1}} / {{pageState.pageInfo.totalPages}}</span>
+        <span>{{pageInfo.size}} per page, {{pageInfo.totalElements}} Entries total,  </span>
+        <span>Page {{pageInfo.page + 1}} / {{pageInfo.totalPages}}</span>
       </div>
-      <div *ngIf="pageState.navigation" fxLayout="row" fxLayoutAlign="space-evenly">
-        <button [disabled]="pageState.pageInfo.page === 0" mat-icon-button (click)="navigation(navOptions.first)">
+      <div *ngIf="navigation" fxLayout="row" fxLayoutAlign="space-evenly">
+        <button [disabled]="pageInfo.page === 0" mat-icon-button (click)="navigation(navOptions.first)">
           <mat-icon>first_page</mat-icon>
         </button>
-        <button [disabled]="pageState.pageInfo.page === 0" mat-icon-button (click)="navigation(navOptions.prev)">
+        <button [disabled]="pageInfo.page === 0" mat-icon-button (click)="navigation(navOptions.prev)">
           <mat-icon>chevron_left</mat-icon>
         </button>
-        <button [disabled]="pageState.pageInfo.page === pageState.pageInfo.totalPages -1" mat-icon-button
+        <button [disabled]="pageInfo.page === pageInfo.totalPages -1" mat-icon-button
                 (click)="navigation(navOptions.next)">
           <mat-icon>chevron_right</mat-icon>
         </button>
-        <button [disabled]="pageState.pageInfo.page === pageState.pageInfo.totalPages -1" mat-icon-button
+        <button [disabled]="pageInfo.page === pageInfo.totalPages -1" mat-icon-button
                 (click)="navigation(navOptions.last)">
           <mat-icon>last_page</mat-icon>
         </button>

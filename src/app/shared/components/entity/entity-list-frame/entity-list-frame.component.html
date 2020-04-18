@@ -31,16 +31,16 @@
     </mat-expansion-panel>
   </div>
   <ng-container *ngIf="pageState$ | async as pageState">
-    <div *ngIf="pageState.data.length > 0" fxLayout="row">
+    <div *ngIf="pageState.data && pageState.data.length > 0" fxLayout="row">
       <app-filter-field (filterChanged)="loadEvent($event)"></app-filter-field>
-      <app-list-navigation [pageState$]="pageState$" (navigation)="navigationEvent($event)"
+      <app-list-navigation [pageInfo$]="pageInfo$" (navigationEvent)="navigationEvent($event)"
                            (pageSizeChanged)="pageSizeEvent($event)">
       </app-list-navigation>
     </div>
     <div fxLayout="row">
       <div [fxFlex]="showImporter ? 20 : 100">
         <app-pure-entity-list *ngIf="!showAsTable"
-                              [$entityComponent]="$listElement" [pageState$]="pageState$"></app-pure-entity-list>
+                              [$entityComponent]="$listElement" [entities$]="data$"></app-pure-entity-list>
         <app-pure-entity-table *ngIf="showAsTable"
                                [entities]="pageState.data"></app-pure-entity-table>
       </div>

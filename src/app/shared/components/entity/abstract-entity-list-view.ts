@@ -12,6 +12,9 @@ export class AbstractEntityListView<T> implements OnInit {
   @Input()
   entityService: EntityService<T>;
 
+  @Input()
+  fullTextSearchFieldNames: any = {};
+
   errs: Observable<any>;
   loading$: Observable<boolean>;
   pageState$: Observable<PageState<Person>>;
@@ -39,11 +42,18 @@ export class AbstractEntityListView<T> implements OnInit {
   }
 
   load() {
-    this.loadEvent('');
+    this.loadEvent(undefined);
   }
 
   loadEvent(filter: string) {
-    this.entityService.load(filter);
+    let param;
+    if(filter && this.fullTextSearchFieldNames) {
+      param = {};
+      for(let k of this.fullTextSearchFieldNames) {
+        param[k] = filter;
+      }
+    }
+    this.entityService.load(param);
   }
 
   navigationEvent(navOption: NavOptions) {

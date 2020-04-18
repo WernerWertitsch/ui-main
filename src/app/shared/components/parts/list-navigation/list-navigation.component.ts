@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {debounceTime, distinctUntilChanged} from "rxjs/operators";
 import {Observable} from "rxjs";
-import {PageState} from "../../../service/abstract-rest/pagable-rest-service";
+import {PageInfo, PageState} from "../../../service/abstract-rest/pagable-rest-service";
 import {NavOptions} from "../../../service/abstract-rest/generic-rest-service";
 
 @Component({
@@ -13,7 +13,7 @@ export class ListNavigationComponent<T> implements OnInit {
   readonly navOptions = NavOptions;
 
   @Input()
-  pageState$: Observable<PageState<T>>;
+  pageInfo$: Observable<PageInfo>;
   sizePerPage: number;
 
   @Output()
@@ -26,9 +26,8 @@ export class ListNavigationComponent<T> implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.pageState$.subscribe(s =>
-      this.sizePerPage = s.pageInfo.size);
-
+    this.pageInfo$.subscribe(i =>
+      this.sizePerPage = i.size);
   }
 
   pageSize() {
