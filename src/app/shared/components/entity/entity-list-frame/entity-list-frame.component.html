@@ -1,4 +1,4 @@
-<div>
+<div fxLayout="column" fxLayoutAlign="center stretch">
   <div fxLayout="row"
        fxLayoutGap="20px" class="mat-background-secondary" style="width: 100%; background-color: gray">
     <div fxFlex="10">
@@ -9,7 +9,7 @@
         <span>({{progress}}%)</span>
       </div>
       <div *ngIf="loading$ | async as loading" fxLayout="row">
-        <mat-spinner diameter="40" [value]="1"></mat-spinner>
+        <mat-spinner diameter="20" [value]="1"></mat-spinner>
       </div>
     </div>
     <div fxFlex="30" fxLayoutAlign="end">
@@ -17,7 +17,7 @@
         {{showImporter ? 'Hide ' : 'Show '}}Importer
       </mat-button-toggle>
       <mat-button-toggle (click)="showAsTable=!showAsTable">
-        {{showAsTable ? 'Normal View ' : 'Table View '}}Importer
+        {{showAsTable ? 'Normal View ' : 'Table View '}}
       </mat-button-toggle>
     </div>
   </div>
@@ -30,23 +30,24 @@
       <app-tiny-log></app-tiny-log>
     </mat-expansion-panel>
   </div>
-  <ng-container *ngIf="pageState$ | async as pageState">
-    <div *ngIf="pageState.data && pageState.data.length > 0" fxLayout="row">
-      <app-filter-field (filterChanged)="loadEvent($event)"></app-filter-field>
-      <app-list-navigation [pageInfo$]="pageInfo$" (navigationEvent)="navigationEvent($event)"
-                           (pageSizeChanged)="pageSizeEvent($event)">
-      </app-list-navigation>
-    </div>
-    <div fxLayout="row">
-      <div [fxFlex]="showImporter ? 20 : 100">
+  <ng-container *ngIf="pageState$ | async as pageState" fxLayout="column">
+    <div *ngIf="!showImporter">
+      <div *ngIf="pageState.data && pageState.data.length > 0" fxLayout="row" fxLayoutAlign="space-between center"
+           style="width: 100%">
+        <app-filter-field (filterChanged)="loadEvent($event)"></app-filter-field>
+        <app-list-navigation fxFlex="35" fxFlexAlign="center end" [pageInfo$]="pageInfo$" (navigationEvent)="navigationEvent($event)"
+                             (pageSizeChanged)="pageSizeEvent($event)">
+        </app-list-navigation>
+      </div>
+      <div>
         <app-pure-entity-list *ngIf="!showAsTable"
                               [$entityComponent]="$listElement" [entities$]="data$"></app-pure-entity-list>
         <app-pure-entity-table *ngIf="showAsTable"
-                               [entities]="pageState.data"></app-pure-entity-table>
+                               [entities$]="data$"></app-pure-entity-table>
       </div>
     </div>
   </ng-container>
-  <div *ngIf="showImporter" fxFlex="80">
+  <div *ngIf="showImporter">
     <app-csv-import (dataChosen)="import($event)" [forcedArrayFields]="['phone','email']"></app-csv-import>
   </div>
 </div>

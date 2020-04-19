@@ -3,7 +3,8 @@ import {AbstractEntityListView} from "../abstract-entity-list-view";
 import {BaseEntity} from "../../../domain/base-domain";
 import {EntityService} from "../../../service/entity-service";
 import {PageInfo} from "../../../service/abstract-rest/pagable-rest-service";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
+import {Person} from "../../../../modules/person/domain";
 
 @Component({
   selector: 'app-entity-list-frame',
@@ -27,6 +28,11 @@ export class EntityListFrameComponent<T extends BaseEntity> extends AbstractEnti
 
   constructor() {
     super()
+  }
+
+  import(data: { filtered: T[], all: T[] }) {
+    super.import(data);
+    this.showImporter = false;
   }
 
   ngOnInit(): void {

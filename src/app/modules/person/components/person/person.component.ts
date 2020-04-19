@@ -12,6 +12,8 @@ export class PersonComponent implements OnInit {
   @Input()
   person: Person;
 
+  showContext: boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {

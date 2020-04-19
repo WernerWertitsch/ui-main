@@ -1,5 +1,9 @@
 <ng-container *ngIf="entities$ | async as entities">
-  <ng-container *ngFor="let entity of entities">
-    <ng-container *ngTemplateOutlet="$entityComponent; context: {$implicit: entity}"></ng-container>
-  </ng-container>
+  <div fxLayout="row wrap" fxLayoutAlign="space-between" class="box-list" #wrapper>
+    <ng-container *ngFor="let entity of entities">
+      <div [fxFlex]="cols$ | async" class="box" fxFlexAlign="">
+        <ng-container *ngTemplateOutlet="$entityComponent; context: {$implicit: entity}"></ng-container>
+      </div>
+    </ng-container>
+  </div>
 </ng-container>

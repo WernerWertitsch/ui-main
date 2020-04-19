@@ -1,5 +1,9 @@
-<div *ngIf="pageInfo$ | async as pageInfo" ##>
-  <div fxFlex="5">
+<div *ngIf="pageInfo$ | async as pageInfo" fxLayout="row" fxFlex="grow" fxLayoutAlign="end center" class="wrapper">
+  <div fxFlex="20">
+    <span style="white-space: nowrap">Page {{pageInfo.page + 1}} / {{pageInfo.totalPages}}</span>
+  </div>
+
+  <div fxFlex="10">
     <mat-select [(ngModel)]="sizePerPage" (selectionChange)="pageSize()" style="background-color: grey;">
       <mat-option [value]="3">3</mat-option>
       <mat-option [value]="20">20</mat-option>
@@ -9,29 +13,24 @@
     </mat-select>
   </div>
 
-  <div fxFles="40%">
-    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="left center">
-      <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="5px">
-        <span>{{pageInfo.size}} per page, {{pageInfo.totalElements}} Entries total,  </span>
-        <span>Page {{pageInfo.page + 1}} / {{pageInfo.totalPages}}</span>
-      </div>
-      <div *ngIf="navigation" fxLayout="row" fxLayoutAlign="space-evenly">
-        <button [disabled]="pageInfo.page === 0" mat-icon-button (click)="navigation(navOptions.first)">
-          <mat-icon>first_page</mat-icon>
-        </button>
-        <button [disabled]="pageInfo.page === 0" mat-icon-button (click)="navigation(navOptions.prev)">
-          <mat-icon>chevron_left</mat-icon>
-        </button>
-        <button [disabled]="pageInfo.page === pageInfo.totalPages -1" mat-icon-button
-                (click)="navigation(navOptions.next)">
-          <mat-icon>chevron_right</mat-icon>
-        </button>
-        <button [disabled]="pageInfo.page === pageInfo.totalPages -1" mat-icon-button
-                (click)="navigation(navOptions.last)">
-          <mat-icon>last_page</mat-icon>
-        </button>
-      </div>
+  <div fxFlex="70" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end center">
+    <span style="white-space: nowrap"> per page, {{pageInfo.totalElements}} Entries total</span>
+    <div *ngIf="navigation" fxLayout="row" fxLayoutAlign="end center">
+      <button [disabled]="pageInfo.page === 0" mat-icon-button (click)="navigation(navOptions.first)">
+        <mat-icon>first_page</mat-icon>
+      </button>
+      <button [disabled]="pageInfo.page === 0" mat-icon-button (click)="navigation(navOptions.prev)">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <button [disabled]="pageInfo.page === pageInfo.totalPages -1" mat-icon-button
+              (click)="navigation(navOptions.next)">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+      <button [disabled]="pageInfo.page === pageInfo.totalPages -1" mat-icon-button
+              (click)="navigation(navOptions.last)">
+        <mat-icon>last_page</mat-icon>
+      </button>
     </div>
-
   </div>
+
 </div>

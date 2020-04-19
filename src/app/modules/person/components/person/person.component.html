@@ -1,7 +1,26 @@
-<mat-card>
+<mat-card class="wrapper" (mouseenter)="showContext=true" (mouseleave)="showContext=true">
   <mat-card-title>
-    {{person.firstname + ' ' + person.lastname}}
+    <div fxLayout="row" fxLayoutAlign="start start">
+      <div fxFlex="80" fxLayout="row"  fxLayoutAlign="start start">
+        <button fxFlex="10" mat-icon-button disabled="true">
+          <mat-icon>person_pin</mat-icon>
+        </button>
+        <div fxLayout="row" fxLayoutAlign="center center" style="padding-top:10px; padding-left: 15px">
+          <span>{{person.firstname + ' ' + person.lastname}}</span>
+        </div>
+      </div>
+      <div fxFlex="20" *ngIf="showContext"  fxLayoutAlign="end start">
+        <button mat-icon-button>
+          <mat-icon>calendar_today</mat-icon>
+        </button>
+        <button mat-icon-button>
+          <mat-icon>phone</mat-icon>
+        </button>
+      </div>
+    </div>
   </mat-card-title>
+
+
   <div fxLayout="column"
        fxLayoutAlign="left"
        fxLayoutGap="3px">
@@ -30,5 +49,4 @@
     </div>
   </div>
 </mat-card>
-
 

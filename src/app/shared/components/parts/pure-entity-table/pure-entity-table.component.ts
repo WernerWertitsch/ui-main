@@ -10,6 +10,8 @@ import {MatTableDataSource} from "@angular/material/table";
 })
 export class PureEntityTableComponent<T extends BaseEntity> implements OnInit {
 
+  readonly defaultIngoreFields=["_links", "self"];
+
   @Input()
   explicitColumns: string[];
 
@@ -17,7 +19,7 @@ export class PureEntityTableComponent<T extends BaseEntity> implements OnInit {
   ignoreFields: string[] = [];
 
   @Input()
-  entities: Observable<T[]>;
+  entities$: Observable<T[]>;
 
   effectiveColumns: string[];
   dataSource: MatTableDataSource<T>;
@@ -28,14 +30,14 @@ export class PureEntityTableComponent<T extends BaseEntity> implements OnInit {
     if(this.explicitColumns) {
       this.effectiveColumns = this.explicitColumns;
     } else {
-      this.entities.subscribe(es => this.defineColumns(es));
+      this.entities$.subscribe(es => this.defineColumns(es));
     }
-    this.entities.subscribe(es => this.dataSource = new MatTableDataSource(es));
+    this.entities$.subscribe(es => this.dataSource = new MatTableDataSource(es));
   }
 
   defineColumns(entities: T[]) {
     if(entities && entities.length>0) {
-      this.effectiveColumns = Object.keys(entities[0]).filter(k => this.ignoreFields.filter(i => k.indexOf(i)>=0).length>0);
+      this.effectiveColumns = Object.keys(entities[0]).filter(k => (this.defaultIngoreFields.concat(this.ignoreFields)).filter(i => k.indexOf(i)>=0).length==0);
     }
   }
 
