@@ -32,10 +32,11 @@
   </div>
   <ng-container *ngIf="pageState$ | async as pageState" fxLayout="column">
     <div *ngIf="!showImporter">
-      <div *ngIf="pageState.data && pageState.data.length > 0" fxLayout="row" fxLayoutAlign="space-between center"
+      <div *ngIf="pageState.data" fxLayout="row" fxLayoutAlign="space-between center"
            style="width: 100%">
         <app-filter-field (filterChanged)="loadEvent($event)"></app-filter-field>
-        <app-list-navigation fxFlex="35" fxFlexAlign="center end" [pageInfo$]="pageInfo$" (navigationEvent)="navigationEvent($event)"
+        <app-list-navigation *ngIf="pageState.data.length > 0"
+                             fxFlex="35" fxFlexAlign="center end" [pageInfo$]="pageInfo$" (navigationEvent)="navigationEvent($event)"
                              (pageSizeChanged)="pageSizeEvent($event)">
         </app-list-navigation>
       </div>
