@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import {PersonModule} from "./modules/person/person.module";
+import {EntityUIModule} from "./modules/entity-ui/entity-u-i.module";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
@@ -15,7 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    PersonModule,
+    EntityUIModule,
     BrowserAnimationsModule,
   ],
   providers: [],

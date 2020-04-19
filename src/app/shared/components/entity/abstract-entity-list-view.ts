@@ -1,6 +1,6 @@
 import { Observable} from "rxjs";
 import {PageState} from "../../service/abstract-rest/pagable-rest-service";
-import {Person} from "../../../modules/person/domain";
+import {Person} from "../../../modules/entity-ui/domain";
 import {map} from "rxjs/operators";
 import {NavOptions} from "../../service/abstract-rest/generic-rest-service";
 import {EntityService} from "../../service/entity-service";

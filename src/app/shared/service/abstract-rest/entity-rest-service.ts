@@ -1,6 +1,6 @@
 import {HttpClient} from "@angular/common/http";
 import {TinyLogService} from "../../components/parts/tiny-log/tiny-log.service";
-import {Person} from "../../../modules/person/domain";
+import {Person} from "../../../modules/entity-ui/domain";
 import {PagableRestService, PageState} from "./pagable-rest-service";
 import {BaseEntity} from "../../domain/base-domain";
 import {EntityService} from "../entity-service";

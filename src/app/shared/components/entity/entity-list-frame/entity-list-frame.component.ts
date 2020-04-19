@@ -4,7 +4,7 @@ import {BaseEntity} from "../../../domain/base-domain";
 import {EntityService} from "../../../service/entity-service";
 import {PageInfo} from "../../../service/abstract-rest/pagable-rest-service";
 import {BehaviorSubject, Observable} from "rxjs";
-import {Person} from "../../../../modules/person/domain";
+import {Person} from "../../../../modules/entity-ui/domain";
 
 @Component({
   selector: 'app-entity-list-frame',

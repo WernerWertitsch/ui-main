@@ -1,0 +1,7 @@
+<ng-template #entityComponent let-address>
+  <app-address [address]="address"></app-address>
+</ng-template>
+
+<app-entity-list-frame [$listElement]="entityComponent"
+                       [entityService]="clientService()"
+                       [fullTextSearchFieldNames]="['line1', 'line2', 'city', 'country']"></app-entity-list-frame>

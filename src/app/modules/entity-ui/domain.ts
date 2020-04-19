@@ -8,3 +8,12 @@ export interface Person extends BaseEntity{
   email: string[];
   phone: string[];
 }
+
+export interface Address extends BaseEntity {
+  type: string;
+  addressline1: string;
+  addressline2: string;
+  zip: string;
+  city: string;
+  country: string;
+}
