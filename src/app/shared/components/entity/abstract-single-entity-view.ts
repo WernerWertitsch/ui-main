@@ -20,12 +20,8 @@ export class AbstractSingleEntityView<T extends BaseEntity> implements OnInit {
     this.fields$ = this.entityService.getEntityFields$();
   }
 
-  save(newEntity: T): Observable<T> {
-    let ret = this.entityService.saveEntity(newEntity);
-    ret.subscribe(e=> {
-      this.entitySavedSuccess.emit(newEntity);
-    });
-    return ret;
+  save(newEntity: T): void {
+   this.entityService.saveEntity(newEntity);
   }
 
 

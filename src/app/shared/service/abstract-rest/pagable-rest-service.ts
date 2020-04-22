@@ -100,7 +100,7 @@ export abstract class PagableRestService<T extends BaseEntity> extends GenericRe
     })
   }
 
-  public save(url: string, entity: T, updateListsOnPosts: boolean = true, reloadListOnPost: boolean = true): Observable<T> {
+  public save(url: string, entity: T, updateListsOnPosts: boolean = true, reloadListOnPost: boolean = true): void {
     this.nextLoading(true);
     let obs = entity.id ? super.putEntity<T>(url, entity) : super.postEntity(url, entity);
     obs.subscribe(e => {
@@ -113,7 +113,6 @@ export abstract class PagableRestService<T extends BaseEntity> extends GenericRe
         }
       }
     })
-    return obs;
   }
 
   public import(url: string, entities: T[]) {

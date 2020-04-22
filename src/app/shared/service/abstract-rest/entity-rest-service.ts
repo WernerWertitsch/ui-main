@@ -53,9 +53,9 @@ export abstract class EntityRestService<T extends BaseEntity> extends PagableRes
     super.import(this.baseUrlBulk, entities);
   }
 
-  public saveEntity(entity: T, reloadList:boolean = true): Observable<T> {
+  public saveEntity(entity: T, reloadList:boolean = true): void {
     this.resetNewEntity(); //might not be necessary, but new should be undefined in all cases here
-    return this.save(this.baseUrl, entity, reloadList);
+    this.save(this.baseUrl, entity, reloadList);
   }
 
   public resetNewEntity() {

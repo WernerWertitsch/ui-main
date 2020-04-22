@@ -14,7 +14,7 @@ export interface EntityService<T> {
   resetNewEntity(): void;
   pushBulk(newEntities: T[]): void;
   load(searchParams?: any): void;
-  saveEntity(entity: T): Observable<T>;
+  saveEntity(entity: T): void;
   navigate(navOption: NavOptions): void;
   changePageSizeAndReload(size: number);
 }
