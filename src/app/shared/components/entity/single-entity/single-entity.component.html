@@ -1,0 +1,61 @@
+<ng-container *ngIf="fields$ | async as fields">
+  <mat-card class="wrapper" (mouseenter)="showContext=true" (mouseleave)="showContext=false">
+    <mat-card-title>
+      <div fxLayout="row" fxLayoutAlign="space-between space-between">
+        <div fxFlex="60" fxLayout="row" fxLayoutAlign="start start">
+          <button *ngIf="!editMode && !processing" fxFlex="10" mat-icon-button disabled="true">
+            <mat-icon>{{titleIconName}}</mat-icon>
+          </button>
+          <mat-spinner [diameter]="20" [value]="processing ? 1 : 0" *ngIf="processing"></mat-spinner>
+
+          <div fxLayout="row" fxLayoutAlign="center center" style="padding-top:10px; padding-left: 15px">
+            <span>{{title}}</span>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div *ngIf="$entityContextComponent && showContext && !editMode"
+               fxLayoutAlign="end start">
+            <ng-container *ngTemplateOutlet="$entityContextComponent; context: {$implicit: entity}"></ng-container>
+          </div>
+          <div fxLayout="row">
+            <button *ngIf="!editMode" (click)="editMode=true" mat-icon-button>
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button *ngIf="editMode" (click)="saveAfterEdit()" mat-icon-button>
+              <mat-icon>save</mat-icon>
+            </button>
+            <button *ngIf="editMode" (click)="cancel()" mat-icon-button>
+              <mat-icon>clear</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-card-title>
+
+
+    <div fxLayout="column" fxLayoutGap="3px">
+      <div *ngFor="let field of fields"
+           fxLayout="row">
+        <div fxFlex="30" *ngIf="!editMode || (editMode && isEditable(field))">{{field}}</div>
+        <div *ngIf="!editMode" fxLayout="column" fxFlex="80">
+          <span *ngIf="isSimpleField(field)">{{entity[field]}}</span>
+          <div *ngIf="isList(field)" fxLayout="column" fxLayoutGap="2px">
+            <div *ngFor="let val of entity[field]; let i = index">
+              {{i + 1}}.{{val}}
+            </div>
+          </div>
+        </div>
+        <div *ngIf="editMode && isEditable(field)" fxLayout="column" fxFlex="80">
+          <input *ngIf="isSimpleField(field)" class="input-field"
+                 matInput [(ngModel)]="editObject[field]"/>
+          <div *ngIf="isList(field)" fxLayout="column" fxLayoutGap="2px">
+            <div *ngFor="let val of entity[field]; let i=index; trackBy:trackByFn" fxLayout="row">
+              <span>{{i + 1}} </span>
+              <input matInput [(ngModel)]="editObject[field][i]" class="input-field">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</ng-container>

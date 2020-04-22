@@ -100,19 +100,20 @@ export abstract class PagableRestService<T extends BaseEntity> extends GenericRe
     })
   }
 
-  public save(url: string, entity: T, updateListsOnPosts: boolean = true, reloadListOnPost: boolean = true) {
+  public save(url: string, entity: T, updateListsOnPosts: boolean = true, reloadListOnPost: boolean = true): Observable<T> {
     this.nextLoading(true);
     let obs = entity.id ? super.putEntity<T>(url, entity) : super.postEntity(url, entity);
     obs.subscribe(e => {
       this.nextLoading(false);
-      if (entity && (!entity.id && updateListsOnPosts)) {
+      if (entity && (!entity.id && reloadListOnPost)) {
         this.reload();
       } else {
-        if (entity && (!entity.id && reloadListOnPost)) {
+        if (entity && entity.id && updateListsOnPosts) {
           this.updatePageStatesWithEntity(entity);
         }
       }
     })
+    return obs;
   }
 
   public import(url: string, entities: T[]) {

@@ -7,9 +7,14 @@ export interface EntityService<T> {
   getLoadingEvents$(): Observable<string[]>;
   getPageState$(): Observable<PageState<T>>;
   getPageTitle$(): Observable<string>;
+  getEntityFields$(): Observable<string[]>;
+  getNewEntity$(): Observable<T>;
 
+  newEntity(): void;
+  resetNewEntity(): void;
   pushBulk(newEntities: T[]): void;
   load(searchParams?: any): void;
+  saveEntity(entity: T): Observable<T>;
   navigate(navOption: NavOptions): void;
   changePageSizeAndReload(size: number);
 }

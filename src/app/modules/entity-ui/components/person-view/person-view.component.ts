@@ -1,14 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {PersonClientService} from "../../service/person-client.service";
-import {BehaviorSubject, forkJoin, merge, Observable, of} from "rxjs";
+import {EntityService} from "../../../../shared/service/entity-service";
 import {Person} from "../../domain";
-import {MatDialog} from "@angular/material/dialog";
-import {CsvImportDialogComponent} from "../../../../shared/components/parts/csv-import/csv-import-dialog/csv-import-dialog.component";
-import {combineLatest, filter, map, tap} from "rxjs/operators";
-import {ScrollStrategyOptions} from "@angular/cdk/overlay";
-import {PageState} from "../../../../shared/service/abstract-rest/pagable-rest-service";
-import {NavOptions} from "../../../../shared/service/abstract-rest/generic-rest-service";
-
 @Component({
   selector: 'app-person-view',
   templateUrl: './person-view.component.html',
@@ -16,8 +9,10 @@ import {NavOptions} from "../../../../shared/service/abstract-rest/generic-rest-
 })
 export class PersonViewComponent implements OnInit {
 
-  constructor(private personClientService: PersonClientService) {
+  service: EntityService<Person>;
 
+  constructor(private personClientService: PersonClientService) {
+    this.service = personClientService;
   }
 
 

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddressComponent } from './address.component';
+import { SingleEntityComponent } from './single-entity.component';
 
-describe('PersonComponent', () => {
-  let component: AddressComponent;
-  let fixture: ComponentFixture<AddressComponent>;
+describe('SingleEntityComponent', () => {
+  let component: SingleEntityComponent;
+  let fixture: ComponentFixture<SingleEntityComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddressComponent ]
+      declarations: [ SingleEntityComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddressComponent);
+    fixture = TestBed.createComponent(SingleEntityComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

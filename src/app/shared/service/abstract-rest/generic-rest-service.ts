@@ -89,9 +89,11 @@ export abstract class GenericRestService<T extends BaseEntity> {
     )
   }
 
-  protected postEntity<T>(url: string, entity: T | T[]): Observable<T> {
+  protected postEntity<T  extends BaseEntity>(url: string, entity: T | T[]): Observable<T> {
+    const finalUrl = !Array.isArray(entity) ?
+      (url+ (entity.id ? ("/"+ entity.id) : "")) : url;
     const eventName="POST"+url;
-    return this.httpClient.post(url, entity).pipe(
+    return this.httpClient.post(finalUrl, entity).pipe(
       map((e: T) => {
         return {...e, ...{self: this.selfLink(e)}} as T
         }),
@@ -103,9 +105,11 @@ export abstract class GenericRestService<T extends BaseEntity> {
     )
   }
 
-  protected putEntity<T>(url: string, entity: T | T[]): Observable<T> {
-    const eventName="PUT"+url;
-    return this.httpClient.put(url, entity).pipe(
+  protected putEntity<T extends BaseEntity>(url: string, entity: T | T[]): Observable<T> {
+    const finalUrl = !Array.isArray(entity) ?
+      (url + (entity.id ? ("/"+ entity.id) : "")) : url;
+    const eventName="PUT"+ finalUrl;
+    return this.httpClient.put(finalUrl, entity).pipe(
       map((e: T) => {
         return {...e, ...{self: this.selfLink(e)}} as T
       }),

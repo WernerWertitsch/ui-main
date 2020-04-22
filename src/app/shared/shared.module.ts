@@ -29,10 +29,11 @@ import { FilterFieldComponent } from './components/parts/filter-field/filter-fie
 import { EntityListFrameComponent } from './components/entity/entity-list-frame/entity-list-frame.component';
 import { PureEntityListComponent } from './components/parts/pure-entity-list/pure-entity-list.component';
 import { PureEntityTableComponent } from './components/parts/pure-entity-table/pure-entity-table.component';
+import { SingleEntityComponent } from './components/entity/single-entity/single-entity.component';
 
 
 @NgModule({
-  declarations: [CsvImportDialogComponent, TinyLogComponent, GenericEntityTableComponent, ListNavigationComponent, FilterFieldComponent, EntityListFrameComponent, PureEntityListComponent, PureEntityTableComponent],
+  declarations: [CsvImportDialogComponent, TinyLogComponent, GenericEntityTableComponent, ListNavigationComponent, FilterFieldComponent, EntityListFrameComponent, PureEntityListComponent, PureEntityTableComponent, SingleEntityComponent],
   providers: [TinyLogService],
   imports: [
     CommonModule,
@@ -79,6 +80,7 @@ import { PureEntityTableComponent } from './components/parts/pure-entity-table/p
         CsvImportDialogComponent,
         MatInputModule,
         EntityListFrameComponent,
+        SingleEntityComponent,
     ]
 })
 export class SharedModule {

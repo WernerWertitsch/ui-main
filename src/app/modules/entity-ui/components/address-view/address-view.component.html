@@ -1,7 +1,34 @@
-<ng-template #entityComponent let-address>
-  <app-address [address]="address"></app-address>
+<ng-template #entityContextComponent let-address>
+  <button mat-icon-button>
+    <mat-icon>calendar_today</mat-icon>
+  </button>
+  <button mat-icon-button>
+    <mat-icon>person</mat-icon>
+  </button>
 </ng-template>
 
-<app-entity-list-frame [$listElement]="entityComponent"
-                       [entityService]="clientService()"
+
+<ng-template #entityComponent let-address>
+  <app-single-entity [entityService]="service"
+                     [entity]="address"
+                     [$entityContextComponent]="entityContextComponent"
+                     [title]="address.adressLine1 + ' ' + address.addressLine2"
+                     [titleIconName]="'person_pin'">
+  </app-single-entity>
+</ng-template>
+
+<ng-template #newEditComponent let-person>
+  <app-single-entity [entityService]="service"
+                     [entity]="person"
+                     [$entityContextComponent]="entityContextComponent"
+                     [title]="'NEW'"
+                     [titleIconName]="'edit'"
+                     [editMode]="true">
+  </app-single-entity>
+</ng-template>
+
+
+<app-entity-list-frame [$listElementComponent]="entityComponent"
+                       [$newElementComponent]="newEditComponent"
+                       [entityService]="service"
                        [fullTextSearchFieldNames]="['line1', 'line2', 'city', 'country']"></app-entity-list-frame>

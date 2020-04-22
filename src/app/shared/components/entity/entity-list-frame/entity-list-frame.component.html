@@ -30,22 +30,31 @@
       <app-tiny-log></app-tiny-log>
     </mat-expansion-panel>
   </div>
-  <ng-container *ngIf="pageState$ | async as pageState" fxLayout="column">
-    <div *ngIf="!showImporter">
+  <ng-container *ngIf="pageState$ | async as pageState">
+    <div *ngIf="!showImporter"  fxLayout="column" fxLayoutGap="10px">
       <div *ngIf="pageState.data" fxLayout="row" fxLayoutAlign="space-between center"
            style="width: 100%">
         <app-filter-field (filterChanged)="loadEvent($event)"></app-filter-field>
-        <app-list-navigation *ngIf="pageState.data.length > 0"
-                             fxFlex="35" fxFlexAlign="center end" [pageInfo$]="pageInfo$" (navigationEvent)="navigationEvent($event)"
-                             (pageSizeChanged)="pageSizeEvent($event)">
-        </app-list-navigation>
+        <div fxLayout="row" fxFlex="35" fxFlexAlign="center end">
+          <button mat-icon-button (click)="newEntityRequested()">
+            <mat-icon>add</mat-icon>
+          </button>
+          <app-list-navigation *ngIf="pageState.data.length > 0"
+                               [pageInfo$]="pageInfo$" (navigationEvent)="navigationEvent($event)"
+                               (pageSizeChanged)="pageSizeEvent($event)">
+          </app-list-navigation>
+        </div>
+      </div>
+      <div *ngIf="newEntity">
+        <ng-container *ngTemplateOutlet="$newElementComponent;  context: {$implicit: newEntity}"></ng-container>
       </div>
       <div>
         <app-pure-entity-list *ngIf="!showAsTable"
-                              [$entityComponent]="$listElement" [entities$]="data$"></app-pure-entity-list>
+                              [$entityComponent]="$listElementComponent" [entities$]="data$"></app-pure-entity-list>
         <app-pure-entity-table *ngIf="showAsTable"
                                [entities$]="data$"></app-pure-entity-table>
       </div>
+
     </div>
   </ng-container>
   <div *ngIf="showImporter">
