@@ -31,11 +31,12 @@
     </mat-expansion-panel>
   </div>
   <ng-container *ngIf="pageState$ | async as pageState">
-    <div *ngIf="!showImporter"  fxLayout="column" fxLayoutGap="10px">
-      <div *ngIf="pageState.data" fxLayout="row" fxLayoutAlign="space-between center"
-           style="width: 100%">
-        <app-filter-field (filterChanged)="loadEvent($event)"></app-filter-field>
-        <div fxLayout="row" fxFlex="35" fxFlexAlign="center end">
+    <div *ngIf="!showImporter" fxLayout="column" fxLayoutGap="10px">
+      <div *ngIf="pageState.data" fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxFlex="30">
+          <app-filter-field (filterChanged)="loadEvent($event)"></app-filter-field>
+        </div>
+        <div fxLayout="row">
           <button mat-icon-button (click)="newEntityRequested()">
             <mat-icon>add</mat-icon>
           </button>
@@ -45,6 +46,8 @@
           </app-list-navigation>
         </div>
       </div>
+
+
       <div *ngIf="newEntity">
         <ng-container *ngTemplateOutlet="$newElementComponent;  context: {$implicit: newEntity}"></ng-container>
       </div>
