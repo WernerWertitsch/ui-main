@@ -1,0 +1,33 @@
+<ng-template #entityContextComponent let-stimmbericht>
+  <button mat-icon-button>
+    <mat-icon>print</mat-icon>
+  </button>
+</ng-template>
+
+
+<ng-template #entityComponent let-stimmbericht>
+  <app-single-entity [entityService]="service"
+                     [entity]="stimmbericht"
+                     [$entityContextComponent]="entityContextComponent"
+                     [title]="stimmbericht.anmerkungen"
+                     [titleIconName]="'image_aspect_ratio'">
+  </app-single-entity>
+</ng-template>
+
+
+<ng-template #newEditComponent let-stimmbericht>
+  <app-single-entity [entityService]="service"
+                     [entity]="stimmbericht"
+                     [$entityContextComponent]="entityContextComponent"
+                     [title]="stimmbericht.anmerkungen"
+                     [titleIconName]="'image_aspect_ratio'"
+                     [editMode]="true">
+  </app-single-entity>
+</ng-template>
+
+
+
+<app-entity-list-frame [$listElementComponent]="entityComponent"
+                       [$newElementComponent]="newEditComponent"
+                       [entityService]="service"
+                       [fullTextSearchFieldNames]="['anmerkungen', 'zahlungsart']"></app-entity-list-frame>

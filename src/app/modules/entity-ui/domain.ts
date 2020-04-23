@@ -17,3 +17,27 @@ export interface Address extends BaseEntity {
   city: string;
   country: string;
 }
+
+export interface Stimmbericht extends BaseEntity {
+  kalenderId: string;
+  luftfeuchtigkeit: string;
+  klavierstimmungVorher: string;
+  klavierstimmungNachher: string;
+  resonanzboden: string;
+  stege: string;
+  saiten: string;
+  stimmwirbel: string;
+  stimmstock: string;
+  hammerkoepfe: string;
+  mechanik: string;
+  daempfer: string;
+  tastatur: string;
+  oberflaeche: string;
+  rahmen: string;
+  anmerkungen: string;
+  oertlichkeit: string;
+  transport: string;
+  nacharbeit: string;
+  zahlungsart: string;
+  kostenvoranschlag: boolean;
+}

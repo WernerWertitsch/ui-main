@@ -1,5 +1,11 @@
 {
   "/people": {
     "target": "http://localhost:8080"
+  },
+  "/stimmberichts": {
+    "target": "http://localhost:8080"
+  },
+  "/addresses": {
+    "target": "http://localhost:8080"
   }
 }
