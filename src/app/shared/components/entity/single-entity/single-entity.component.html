@@ -37,24 +37,41 @@
       <div *ngFor="let field of fields"
            fxLayout="row">
         <div fxFlex="30" *ngIf="!editMode || (editMode && isEditable(field))">{{field}}</div>
-        <div *ngIf="!editMode" fxLayout="column" fxFlex="80">
-          <span *ngIf="isSimpleField(field)">{{entity[field]}}</span>
-          <div *ngIf="isList(field)" fxLayout="column" fxLayoutGap="2px">
-            <div *ngFor="let val of entity[field]; let i = index">
-              {{i + 1}}.{{val}}
-            </div>
+        <ng-container *ngIf="entity[field]">
+          <div *ngIf="!editMode" fxLayout="column" fxFlex="80">
+            <ng-container *ngIf="!$subEntityComponents[field] || !$subEntityComponents[field].view">
+              <span *ngIf="isSimpleField(field)">{{entity[field]}}</span>
+              <div *ngIf="isList(field)" fxLayout="column" fxLayoutGap="2px">
+                <div *ngFor="let val of entity[field]; let i = index">
+                  {{i + 1}}.{{val}}
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="$subEntityComponents[field] && $subEntityComponents[field].view">
+              <ng-container
+                *ngTemplateOutlet="$subEntityComponents[field].view; context: {$implicit: entity[field]}"></ng-container>
+            </ng-container>
           </div>
-        </div>
-        <div *ngIf="editMode && isEditable(field)" fxLayout="column" fxFlex="80">
-          <input *ngIf="isSimpleField(field)" class="input-field"
-                 matInput [(ngModel)]="editObject[field]"/>
-          <div *ngIf="isList(field)" fxLayout="column" fxLayoutGap="2px">
-            <div *ngFor="let val of entity[field]; let i=index; trackBy:trackByFn" fxLayout="row">
-              <span>{{i + 1}} </span>
-              <input matInput [(ngModel)]="editObject[field][i]" class="input-field">
-            </div>
+          <div *ngIf="editMode && isEditable(field)" fxLayout="column" fxFlex="80">
+            <ng-container *ngIf="!$subEntityComponents[field] || !$subEntityComponents[field].edit">
+              <input *ngIf="isSimpleField(field)" class="input-field"
+                     matInput [(ngModel)]="editObject[field]"/>
+              <div *ngIf="isList(field)" fxLayout="column" fxLayoutGap="2px">
+                <div *ngFor="let val of entity[field]; let i=index; trackBy:trackByFn" fxLayout="row">
+                  <span>{{i + 1}} </span>
+                  <input matInput [(ngModel)]="editObject[field][i]" class="input-field">
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="$subEntityComponents[field] && $subEntityComponents[field].edit">
+              <ng-container
+                *ngTemplateOutlet="$subEntityComponents[field].edit; context: {$implicit: entity[field]}"></ng-container>
+            </ng-container>
           </div>
-        </div>
+        </ng-container>
+        <ng-container *ngIf = "!entity[field]">
+          <span>/</span>
+        </ng-container>
       </div>
     </div>
   </mat-card>

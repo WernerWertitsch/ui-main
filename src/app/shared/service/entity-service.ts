@@ -11,6 +11,7 @@ export interface EntityService<T> {
   getNewEntity$(): Observable<T>;
 
   newEntity(): void;
+  loadEntity(url: string): Observable<T>;
   resetNewEntity(): void;
   pushBulk(newEntities: T[]): void;
   load(searchParams?: any): void;

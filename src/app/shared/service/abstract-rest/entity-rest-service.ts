@@ -58,6 +58,10 @@ export abstract class EntityRestService<T extends BaseEntity> extends PagableRes
     this.save(this.baseUrl, entity, reloadList);
   }
 
+  public loadEntity(url: string): Observable<T> {
+    return this.loadSingle(url);
+  }
+
   public resetNewEntity() {
     this.newEntity$.next(undefined);
   }

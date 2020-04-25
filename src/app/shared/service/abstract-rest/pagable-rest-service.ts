@@ -86,9 +86,11 @@ export abstract class PagableRestService<T extends BaseEntity> extends GenericRe
     })
   }
 
-  protected loadSingle(url: string, replaceEntityInList: boolean = true, reloadList: boolean = false): void {
+  //check first id the object might be already loaded
+  protected loadSingle(url: string, replaceEntityInList: boolean = true, reloadList: boolean = false): Observable<T> {
     this.nextLoading(true);
-    super.getSingle<T>(url).subscribe(e => {
+    const ret = super.getSingle<T>(url);
+    ret.subscribe(e => { //this will very likely become a "tap"...all of them here..
       if (reloadList) {
         this.reload();
       } else {
@@ -96,8 +98,8 @@ export abstract class PagableRestService<T extends BaseEntity> extends GenericRe
           this.updatePageStatesWithEntity(e);
         }
       }
-
-    })
+    });
+    return ret;
   }
 
   public save(url: string, entity: T, updateListsOnPosts: boolean = true, reloadListOnPost: boolean = true): void {

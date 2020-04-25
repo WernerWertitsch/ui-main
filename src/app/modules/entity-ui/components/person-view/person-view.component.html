@@ -8,10 +8,31 @@
 </ng-template>
 
 
+<ng-template #viewAddressComponent let-address>
+  <app-single-entity [entityService]="service"
+                     [entity]="address"
+                     [$entityContextComponent]="entityContextComponent"
+                     [title]="'NEW'"
+                     [titleIconName]="'edit'">
+  </app-single-entity>
+</ng-template>
+
+<ng-template #editAddressComponent let-address>
+  <app-single-entity [entityService]="service"
+                     [entity]="address"
+                     [$entityContextComponent]="entityContextComponent"
+                     [title]="'NEW'"
+                     [titleIconName]="'edit'"
+                     [editMode]="true">
+  </app-single-entity>
+</ng-template>
+
+
 <ng-template #entityComponent let-person>
   <app-single-entity [entityService]="service"
                      [entity]="person"
                      [$entityContextComponent]="entityContextComponent"
+                     [$subEntityComponents]="$subComponents"
                      [title]="person.lastname + ' ' + person.firstname"
                      [titleIconName]="'person_pin'">
   </app-single-entity>
@@ -23,10 +44,10 @@
                      [$entityContextComponent]="entityContextComponent"
                      [title]="'NEW'"
                      [titleIconName]="'edit'"
+                     [$subEntityComponents]="$subComponents"
                      [editMode]="true">
-    </app-single-entity>
+  </app-single-entity>
 </ng-template>
-
 
 
 <app-entity-list-frame [$listElementComponent]="entityComponent"

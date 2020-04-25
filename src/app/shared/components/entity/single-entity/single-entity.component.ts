@@ -25,6 +25,9 @@ export class SingleEntityComponent<T extends BaseEntity> extends AbstractSingleE
   $entityContextComponent: ElementRef<any>;
 
   @Input()
+  $subEntityComponents: {[id:string]:  {view: ElementRef<any>, edit: ElementRef<any>}};
+
+  @Input()
   nonSimpleFieldTypes: {[id:string]:FieldType} = {};
 
   @Input()
